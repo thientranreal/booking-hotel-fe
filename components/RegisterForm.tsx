@@ -24,13 +24,11 @@ const RegisterForm = () => {
   const [confirmedPassword, setConfirmedPassword] = useState<string>("");
   // End State
 
-  const registerBtnRef = useRef<HTMLButtonElement | null>(null);
-  const inputShopNameRef = useRef<any>(null);
+  const registerBtnRef = useRef<HTMLButtonElement>(null);
   const inputPhoneRef = useRef<any>(null);
   const inputEmailRef = useRef<any>(null);
   const inputPassRef = useRef<any>(null);
   const inputConfirmedPassRef = useRef<any>(null);
-  const inputTUNRef = useRef<any>(null);
 
   const handleRegister: MouseEventHandler<HTMLButtonElement> | undefined = (
     e

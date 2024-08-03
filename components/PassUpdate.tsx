@@ -7,11 +7,11 @@ import PasswordField from "./PasswordField";
 import handleEnterKey from "../utils/handleEnterKey";
 
 const PassUpdate = () => {
-  const [currentPass, setCurrentPass] = useState("");
-  const [newPass, setNewPass] = useState("");
-  const [confirmedNewPass, setConfirmedNewPass] = useState("");
+  const [currentPass, setCurrentPass] = useState<string>("");
+  const [newPass, setNewPass] = useState<string>("");
+  const [confirmedNewPass, setConfirmedNewPass] = useState<string>("");
 
-  const saveBtnRef = useRef(null);
+  const saveBtnRef = useRef<HTMLButtonElement>(null);
 
   const handleSaveBtn = () => {
     console.log("Hello");
@@ -27,7 +27,6 @@ const PassUpdate = () => {
           <PasswordField
             id="currentPass"
             label="Mật khẩu hiện tại"
-            variant="standard"
             value={currentPass}
             onChange={(e) => setCurrentPass(e.target.value)}
             onKeyDown={(e) => handleEnterKey(e, saveBtnRef)}
@@ -36,7 +35,6 @@ const PassUpdate = () => {
           <PasswordField
             id="newPass"
             label="Mật khẩu mới"
-            variant="standard"
             value={newPass}
             onChange={(e) => setNewPass(e.target.value)}
             onKeyDown={(e) => handleEnterKey(e, saveBtnRef)}
@@ -45,7 +43,6 @@ const PassUpdate = () => {
           <PasswordField
             id="confirmedNewPass"
             label="Nhập lại mật khẩu mới"
-            variant="standard"
             value={confirmedNewPass}
             onChange={(e) => setConfirmedNewPass(e.target.value)}
             onKeyDown={(e) => handleEnterKey(e, saveBtnRef)}

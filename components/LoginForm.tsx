@@ -27,7 +27,7 @@ export default function LoginForm() {
 
   const inputEmailRef = useRef<any>(null);
   const inputPassRef = useRef<any>(null);
-  const loginButtonRef = useRef<HTMLButtonElement | null>(null);
+  const loginButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleLogin: MouseEventHandler<HTMLButtonElement> | undefined = (e) => {
     e.preventDefault();

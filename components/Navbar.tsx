@@ -77,10 +77,10 @@ export default function Navbar() {
             direction="row"
           >
             <Button variant="outlined" component={Link} href="/login">
-              Login
+              Đăng nhập
             </Button>
             <Button variant="contained" component={Link} href="/register">
-              Register
+              Đăng ký
             </Button>
           </Stack>
         </Toolbar>

@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import { Container } from "@mui/material";
 
 export default function MainLayout({
   children,
@@ -8,7 +9,7 @@ export default function MainLayout({
   return (
     <section>
       <Navbar />
-      {children}
+      <Container>{children}</Container>
     </section>
   );
 }

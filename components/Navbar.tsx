@@ -11,10 +11,11 @@ import SideNav from "./SideNav";
 import { useState } from "react";
 import { Button, Stack } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
 
 const pages = ["HOME", "RESTAURANTS", "RESERVATIONS", "CONTACT"];
 
-function Navbar() {
+export default function Navbar() {
   const [openSidebar, setOpenSidebar] = useState<boolean>(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -61,6 +62,8 @@ function Navbar() {
               <Button
                 key={text}
                 sx={{ my: 2, color: "black", display: "block" }}
+                component={Link}
+                href={text === "HOME" ? "/" : `/${text.toLowerCase()}`}
               >
                 {text}
               </Button>
@@ -73,13 +76,15 @@ function Navbar() {
             spacing={2}
             direction="row"
           >
-            <Button variant="outlined">Login</Button>
-            <Button variant="contained">Register</Button>
+            <Button variant="outlined" component={Link} href="/login">
+              Login
+            </Button>
+            <Button variant="contained" component={Link} href="/register">
+              Register
+            </Button>
           </Stack>
         </Toolbar>
       </Container>
     </AppBar>
   );
 }
-
-export default Navbar;

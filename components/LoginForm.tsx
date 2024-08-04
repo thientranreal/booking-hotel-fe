@@ -14,6 +14,7 @@ import handleEnterKey from "../utils/handleEnterKey";
 import { LoadingButton } from "@mui/lab";
 import SendIcon from "@mui/icons-material/Send";
 import Image from "next/image";
+import Link from "next/link";
 
 interface Errors {
   email?: string;
@@ -140,17 +141,19 @@ export default function LoginForm() {
           </LoadingButton>
           <Typography variant="subtitle1" sx={{ textAlign: "center" }}>
             Bạn đã chưa có tài khoản?{" "}
-            <Typography
-              component="span"
-              color="primary"
-              sx={{
-                textDecoration: "underline",
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
-            >
-              Đăng ký
-            </Typography>
+            <Link href="/register">
+              <Typography
+                component="span"
+                color="primary"
+                sx={{
+                  textDecoration: "underline",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                Đăng ký
+              </Typography>
+            </Link>
           </Typography>
         </Box>
       </Box>

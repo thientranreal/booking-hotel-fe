@@ -72,7 +72,7 @@ const RegisterForm = () => {
     }
   };
   return (
-    <Box display="flex" flexDirection="column" width="30rem" rowGap={2}>
+    <Box display="flex" flexDirection="column" px={2} rowGap={2}>
       <Typography
         variant="h4"
         color="primary"

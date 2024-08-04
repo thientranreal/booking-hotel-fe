@@ -1,20 +1,14 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
-import StarIcon from "@mui/icons-material/Star";
-import StarHalfIcon from "@mui/icons-material/StarHalf";
-import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import Image from "next/image";
-
-const starStyle = {
-  color: "#FFC107",
-  fontSize: "medium",
-};
+import ResRatingReadOnly from "./ResRatingReadOnly";
 
 interface CardRestaurantProps {
   image: string;
   title: string;
   categories: string;
-  starRatings: string;
-  numberPeopelRate: string;
+  starRatings: number;
+  numberPeopelRate: number;
+  slotsLeft: number;
 }
 
 export default function CardRestaurant({
@@ -23,33 +17,8 @@ export default function CardRestaurant({
   categories,
   starRatings,
   numberPeopelRate,
+  slotsLeft,
 }: CardRestaurantProps) {
-  // Get integer part
-  let integerPart = parseInt(starRatings);
-  // Get decimal part
-  let decimalPart = Number(Number(starRatings).toFixed(1).split(".")[1]);
-
-  if (decimalPart <= 2) {
-    decimalPart = 0;
-  } else if (decimalPart >= 3 && decimalPart <= 8) {
-    decimalPart = 0.5;
-  } else {
-    decimalPart = 0;
-    integerPart += 1;
-  }
-
-  const starArr = new Array(5).fill(0);
-  for (let i = 0; i < 5; i++) {
-    integerPart = integerPart - 1;
-    if (integerPart < 0) {
-      if (decimalPart !== 0) {
-        starArr[i] = decimalPart;
-      }
-      break;
-    }
-    starArr[i] = 1;
-  }
-
   return (
     <Paper elevation={4}>
       <Box height={200} position="relative">
@@ -63,28 +32,18 @@ export default function CardRestaurant({
         <Typography sx={{ mb: 2 }} variant="body2" color="text.secondary">
           {categories}
         </Typography>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography variant="body1" sx={{ mr: 0.5, fontWeight: "500" }}>
-            {starRatings}
-          </Typography>
-          <Box sx={{ mr: 0.5 }}>
-            {starArr.map((value, index) => {
-              if (value === 1) {
-                return <StarIcon key={index} sx={starStyle} />;
-              }
-              if (value === 0) {
-                return <StarOutlineIcon key={index} sx={starStyle} />;
-              } else {
-                return <StarHalfIcon key={index} sx={starStyle} />;
-              }
-            })}
-          </Box>
-          <Typography variant="body2" color="text.secondary">
+        <Box display="flex" alignItems="center">
+          <ResRatingReadOnly value={starRatings} />
+          <Typography ml={1} variant="body2" color="text.secondary">
             ({numberPeopelRate})
           </Typography>
         </Box>
 
-        <Button fullWidth sx={{ mt: 3 }} variant="contained">
+        <Typography variant="subtitle1" fontWeight={600} mt={2}>
+          Còn {slotsLeft} chỗ
+        </Typography>
+
+        <Button fullWidth variant="contained">
           Book a table
         </Button>
       </Box>

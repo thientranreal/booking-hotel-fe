@@ -4,55 +4,63 @@ import { Box, Grid } from "@mui/material";
 import CardRestaurant from "@/components/CardRestaurant";
 import SearchBar from "@/components/SearchBar";
 
+const restaurantData = [
+  {
+    id: 1,
+    image: "/images/login-table-reserve.jpg",
+    title: "test",
+    categories: "abc, xyz, ghi",
+    starRatings: 4,
+    numberPeopelRate: 20000,
+    slotsLeft: 3,
+  },
+  {
+    id: 2,
+    image: "/images/login-table-reserve.jpg",
+    title: "test",
+    categories: "abc, xyz, ghi",
+    starRatings: 4,
+    numberPeopelRate: 20000,
+    slotsLeft: 3,
+  },
+  {
+    id: 3,
+    image: "/images/login-table-reserve.jpg",
+    title: "test",
+    categories: "abc, xyz, ghi",
+    starRatings: 5,
+    numberPeopelRate: 20000,
+    slotsLeft: 3,
+  },
+  {
+    id: 4,
+    image: "/images/login-table-reserve.jpg",
+    title: "test",
+    categories: "abc, xyz, ghi",
+    starRatings: 4,
+    numberPeopelRate: 20000,
+    slotsLeft: 3,
+  },
+];
+
 export default function Restaurants() {
   return (
-    <Box mt={5}>
+    <Box>
       <SearchBar />
 
       <Grid container spacing={2} mt={5}>
-        <Grid item xs={12} md={6} lg={4}>
-          <CardRestaurant
-            image="/images/login-table-reserve.jpg"
-            title="test"
-            categories="abc, xyz, ghi"
-            starRatings={4}
-            numberPeopelRate={20000}
-            slotsLeft={3}
-          />
-        </Grid>
-
-        <Grid item xs={12} md={6} lg={4}>
-          <CardRestaurant
-            image="/images/login-table-reserve.jpg"
-            title="test"
-            categories="abc, xyz, ghi"
-            starRatings={4}
-            numberPeopelRate={20000}
-            slotsLeft={3}
-          />
-        </Grid>
-
-        <Grid item xs={12} md={6} lg={4}>
-          <CardRestaurant
-            image="/images/login-table-reserve.jpg"
-            title="test"
-            categories="abc, xyz, ghi"
-            starRatings={5}
-            numberPeopelRate={20000}
-            slotsLeft={3}
-          />
-        </Grid>
-
-        <Grid item xs={12} md={6} lg={4}>
-          <CardRestaurant
-            image="/images/login-table-reserve.jpg"
-            title="test"
-            categories="abc, xyz, ghi"
-            starRatings={4}
-            numberPeopelRate={20000}
-            slotsLeft={3}
-          />
-        </Grid>
+        {restaurantData.map((restaurant) => (
+          <Grid item xs={12} md={6} lg={4} key={restaurant.id}>
+            <CardRestaurant
+              image={restaurant.image}
+              title={restaurant.title}
+              categories={restaurant.categories}
+              starRatings={restaurant.starRatings}
+              numberPeopelRate={restaurant.numberPeopelRate}
+              slotsLeft={restaurant.slotsLeft}
+            />
+          </Grid>
+        ))}
       </Grid>
     </Box>
   );

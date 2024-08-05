@@ -56,26 +56,26 @@ export default function LoginForm() {
   };
 
   return (
-    <Box>
+    <Box px={5}>
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           flexDirection: "column",
-          mb: 5,
         }}
       >
         <Image src="/images/logo.png" alt="Login" width={100} height={100} />
         <Typography
           variant="h4"
           color="primary"
-          sx={{ fontWeight: 500, my: 3 }}
+          sx={{
+            fontWeight: 500,
+            my: 3,
+            fontSize: "2rem",
+          }}
         >
           Đăng nhập tài khoản
-        </Typography>
-        <Typography variant="h5" sx={{ fontSize: "1.25rem" }}>
-          Chào mừng bạn quay lại Book A Table
         </Typography>
       </Box>
 

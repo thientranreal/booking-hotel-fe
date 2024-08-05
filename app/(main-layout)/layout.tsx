@@ -9,7 +9,7 @@ export default function MainLayout({
   return (
     <section>
       <Navbar />
-      <Container>{children}</Container>
+      <Container sx={{ py: 5 }}>{children}</Container>
     </section>
   );
 }

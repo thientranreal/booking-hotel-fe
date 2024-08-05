@@ -9,6 +9,8 @@ import {
   FormLabel,
   Stack,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import { useState } from "react";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -18,9 +20,17 @@ import StarIcon from "@mui/icons-material/Star";
 
 export default function SearchBar() {
   const [open, setOpen] = useState<boolean>(false);
+  const [star, setStart] = useState<Array<string>>([]);
 
   const handleClick = () => {
     setOpen(!open);
+  };
+
+  const handleStar = (
+    event: React.MouseEvent<HTMLElement>,
+    newStars: string[]
+  ) => {
+    setStart(newStars);
   };
 
   return (
@@ -53,6 +63,7 @@ export default function SearchBar() {
         </Stack>
       </Box>
 
+      {/* Show filter */}
       <Collapse sx={{ mt: 2 }} in={open} timeout="auto" unmountOnExit>
         <FormControl sx={{ px: 3 }} component="fieldset" variant="standard">
           <FormLabel component="legend">Cuisine</FormLabel>
@@ -81,21 +92,40 @@ export default function SearchBar() {
         <FormControl sx={{ px: 3 }} component="fieldset" variant="standard">
           <FormLabel component="legend">Rating</FormLabel>
 
-          <Box display="flex" maxWidth="10rem" mt={1} gap={2} flexWrap="wrap">
-            {[1, 2, 3, 4, 5].map((item) => (
-              <Button
-                variant="outlined"
-                key={item}
-                sx={{ border: "1px solid gray" }}
-              >
+          {/* 1 - 3 star */}
+          <ToggleButtonGroup
+            value={star}
+            onChange={handleStar}
+            aria-label="star selection"
+            sx={{ mt: 1 }}
+          >
+            {[1, 2, 3].map((item) => (
+              <ToggleButton key={item} value={item} aria-label={`${item} star`}>
                 {[...Array(item)].map((_, index) => (
                   <StarIcon sx={{ color: "#FFC107" }} key={index} />
                 ))}
-              </Button>
+              </ToggleButton>
             ))}
-          </Box>
+          </ToggleButtonGroup>
+
+          {/* 4 - 5 star */}
+          <ToggleButtonGroup
+            value={star}
+            onChange={handleStar}
+            aria-label="star selection"
+          >
+            {[4, 5].map((item) => (
+              <ToggleButton key={item} value={item} aria-label={`${item} star`}>
+                {[...Array(item)].map((_, index) => (
+                  <StarIcon sx={{ color: "#FFC107" }} key={index} />
+                ))}
+              </ToggleButton>
+            ))}
+          </ToggleButtonGroup>
+          {/* End filter star */}
         </FormControl>
       </Collapse>
+      {/* End show filter */}
     </Box>
   );
 }

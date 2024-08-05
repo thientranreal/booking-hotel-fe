@@ -27,7 +27,6 @@ export default function ResRatingFeedback() {
   return (
     <Box
       sx={{
-        width: 200,
         display: "flex",
         alignItems: "center",
       }}

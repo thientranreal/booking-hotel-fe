@@ -1,6 +1,7 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
 import Image from "next/image";
 import ResRatingReadOnly from "./ResRatingReadOnly";
+import { MouseEventHandler } from "react";
 
 interface CardRestaurantProps {
   image: string;
@@ -9,6 +10,7 @@ interface CardRestaurantProps {
   starRatings: number;
   numberPeopelRate: number;
   slotsLeft: number;
+  onClick: MouseEventHandler<HTMLButtonElement> | undefined;
 }
 
 export default function CardRestaurant({
@@ -18,6 +20,7 @@ export default function CardRestaurant({
   starRatings,
   numberPeopelRate,
   slotsLeft,
+  onClick,
 }: CardRestaurantProps) {
   return (
     <Paper elevation={4}>
@@ -43,7 +46,7 @@ export default function CardRestaurant({
           Còn {slotsLeft} chỗ
         </Typography>
 
-        <Button fullWidth variant="contained">
+        <Button onClick={onClick} fullWidth variant="contained">
           Book a table
         </Button>
       </Box>

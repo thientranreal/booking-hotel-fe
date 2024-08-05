@@ -3,6 +3,8 @@
 import { Box, Grid } from "@mui/material";
 import CardRestaurant from "@/components/CardRestaurant";
 import SearchBar from "@/components/SearchBar";
+import { useState } from "react";
+import BookingModal from "@/components/BookingModal";
 
 const restaurantData = [
   {
@@ -44,6 +46,9 @@ const restaurantData = [
 ];
 
 export default function Restaurants() {
+  const [open, setOpen] = useState<boolean>(false);
+  const [bookRestaurant, setBookRestaurant] = useState<string>("");
+
   return (
     <Box>
       <SearchBar />
@@ -58,10 +63,20 @@ export default function Restaurants() {
               starRatings={restaurant.starRatings}
               numberPeopelRate={restaurant.numberPeopelRate}
               slotsLeft={restaurant.slotsLeft}
+              onClick={() => {
+                setOpen(true);
+                setBookRestaurant(restaurant.title);
+              }}
             />
           </Grid>
         ))}
       </Grid>
+
+      <BookingModal
+        open={open}
+        restaurantName={bookRestaurant}
+        onClose={() => setOpen(false)}
+      />
     </Box>
   );
 }

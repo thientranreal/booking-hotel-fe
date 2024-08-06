@@ -5,6 +5,8 @@ import CardRestaurant from "@/components/CardRestaurant";
 import SearchBar from "@/components/SearchBar";
 import { useState } from "react";
 import BookingModal from "@/components/BookingModal";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const restaurantData = [
   {
@@ -72,11 +74,13 @@ export default function Restaurants() {
         ))}
       </Grid>
 
-      <BookingModal
-        open={open}
-        restaurantName={bookRestaurant}
-        onClose={() => setOpen(false)}
-      />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <BookingModal
+          open={open}
+          restaurantName={bookRestaurant}
+          onClose={() => setOpen(false)}
+        />
+      </LocalizationProvider>
     </Box>
   );
 }

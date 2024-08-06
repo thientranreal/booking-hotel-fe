@@ -7,6 +7,8 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
+import { DatePicker, TimePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 interface BookingModalProps {
   open: boolean;
@@ -21,25 +23,44 @@ export default function BookingModal({
 }: BookingModalProps) {
   return (
     <Dialog open={open} onClose={onClose}>
-      <Box width={500} p={5}>
+      <Box width={{ xs: "inherit", md: "500px" }} p={5}>
         <DialogTitle textAlign="center">
-          Book a table at {restaurantName}
+          Đặt chỗ cho {restaurantName}
         </DialogTitle>
 
         <DialogContent>
           <Stack spacing={3}>
+            {/* Date time picker */}
+            <Box
+              pt={2}
+              display="flex"
+              gap={2}
+              flexDirection={{ xs: "column", md: "row" }}
+            >
+              <DatePicker
+                label="Ngày"
+                defaultValue={dayjs()}
+                format="DD/MM/YYYY"
+                disablePast
+              />
+              <TimePicker label="Giờ" defaultValue={dayjs()} disablePast />
+            </Box>
+            {/* End date time picker */}
             <TextField id="name" label="Tên" variant="standard" />
+
             <TextField id="email" label="Email" variant="standard" />
+
             <TextField id="phone" label="Số điện thoại" variant="standard" />
+
             <Box
               display="flex"
               alignItems="center"
               justifyContent="center"
               gap={2}
             >
-              <Button variant="contained">Book Table</Button>
+              <Button variant="contained">Đặt bàn</Button>
               <Button variant="outlined" onClick={onClose}>
-                Cancel
+                Hủy
               </Button>
             </Box>
           </Stack>

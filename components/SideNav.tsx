@@ -5,7 +5,7 @@ import {
   ListItem,
   ListItemButton,
   Button,
-  Stack,
+  Box,
 } from "@mui/material";
 import Link from "next/link";
 
@@ -26,14 +26,14 @@ export default function SideNav() {
         </ListItem>
       ))}
 
-      <Stack spacing={2} p={2}>
+      <Box display="flex" flexDirection="column" gap={2} p={2}>
         <Button variant="outlined" component={Link} href="/login">
           Đăng nhập
         </Button>
         <Button variant="contained" component={Link} href="/register">
           Đăng ký
         </Button>
-      </Stack>
+      </Box>
     </List>
   );
 }

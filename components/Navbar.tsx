@@ -9,7 +9,7 @@ import Container from "@mui/material/Container";
 import Drawer from "@mui/material/Drawer";
 import SideNav from "./SideNav";
 import { useState } from "react";
-import { Button, Stack } from "@mui/material";
+import { Button } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -70,19 +70,14 @@ export default function Navbar() {
             ))}
           </Box>
 
-          <Stack
-            display={{ xs: "none", md: "flex" }}
-            py={1}
-            spacing={2}
-            direction="row"
-          >
+          <Box display={{ xs: "none", md: "flex" }} py={1} gap={2}>
             <Button variant="outlined" component={Link} href="/login">
               Đăng nhập
             </Button>
             <Button variant="contained" component={Link} href="/register">
               Đăng ký
             </Button>
-          </Stack>
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>

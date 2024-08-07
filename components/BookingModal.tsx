@@ -4,7 +4,6 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  Stack,
   TextField,
 } from "@mui/material";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
@@ -23,19 +22,19 @@ export default function BookingModal({
 }: BookingModalProps) {
   return (
     <Dialog open={open} onClose={onClose}>
-      <Box width={{ xs: "inherit", md: "500px" }} p={5}>
+      <Box p={5}>
         <DialogTitle textAlign="center">
           Đặt chỗ cho {restaurantName}
         </DialogTitle>
 
         <DialogContent>
-          <Stack spacing={3}>
+          <Box display="flex" flexDirection="column" gap={3}>
             {/* Date time picker */}
             <Box
               pt={2}
               display="flex"
               gap={2}
-              flexDirection={{ xs: "column", md: "row" }}
+              flexDirection={{ xs: "column", sm: "row" }}
             >
               <DatePicker
                 label="Ngày"
@@ -72,7 +71,7 @@ export default function BookingModal({
                 Hủy
               </Button>
             </Box>
-          </Stack>
+          </Box>
         </DialogContent>
       </Box>
     </Dialog>

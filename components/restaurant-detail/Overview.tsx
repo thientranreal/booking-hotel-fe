@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Stack, Typography } from "@mui/material";
+import { Box, Button, Chip, Typography } from "@mui/material";
 import ResRatingReadOnly from "../ResRatingReadOnly";
 import ReviewsOutlinedIcon from "@mui/icons-material/ReviewsOutlined";
 import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
@@ -12,12 +12,12 @@ export default function Overview() {
   const [bookRestaurant, setBookRestaurant] = useState<string>("");
   return (
     <>
-      <Stack spacing={3}>
+      <Box display="flex" flexDirection="column" gap={3}>
         <Typography component="h1" variant="h5" fontWeight={600}>
           El Gaucho Argentinian Steakhouse - Hai Ba Trung
         </Typography>
 
-        <Stack direction="row" spacing={3}>
+        <Box display="flex" gap={3} flexDirection={{ xs: "column", sm: "row" }}>
           <ResRatingReadOnly value={4.3} />
 
           <Box>
@@ -31,13 +31,13 @@ export default function Overview() {
             <AttachMoneyOutlinedIcon />
             <Typography component="span">Money</Typography>
           </Box>
-        </Stack>
+        </Box>
 
-        <Stack direction="row" spacing={2}>
+        <Box display="flex" gap={2} flexWrap="wrap">
           <Chip label="Category 1" variant="outlined" />
           <Chip label="Category 2" variant="outlined" />
           <Chip label="Category 3" variant="outlined" />
-        </Stack>
+        </Box>
 
         <Typography>
           OUR EL GAUCHO STEAKHOUSE – CONTEMPORARY AND SPECIALIZED We are proud
@@ -65,7 +65,7 @@ export default function Overview() {
         >
           Book a table
         </Button>
-      </Stack>
+      </Box>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <BookingModal
           open={open}

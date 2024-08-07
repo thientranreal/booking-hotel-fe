@@ -7,7 +7,6 @@ import {
   FormControlLabel,
   FormGroup,
   FormLabel,
-  Stack,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
@@ -49,7 +48,7 @@ export default function SearchBar() {
           sx={{ width: { xs: "inherit", sm: "20rem", md: "25rem" } }}
         />
 
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Box display="flex" gap={2} alignItems="center">
           <Button
             startIcon={open ? <FilterAltOffIcon /> : <FilterAltIcon />}
             variant="outlined"
@@ -60,7 +59,7 @@ export default function SearchBar() {
           <Button startIcon={<SearchIcon />} variant="contained">
             Tìm kiếm
           </Button>
-        </Stack>
+        </Box>
       </Box>
 
       {/* Show filter */}

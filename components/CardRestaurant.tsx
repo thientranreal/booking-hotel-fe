@@ -2,8 +2,10 @@ import { Box, Button, Paper, Typography } from "@mui/material";
 import Image from "next/image";
 import ResRatingReadOnly from "./ResRatingReadOnly";
 import { MouseEventHandler } from "react";
+import Link from "next/link";
 
 interface CardRestaurantProps {
+  id: string;
   image: string;
   title: string;
   categories: string;
@@ -14,6 +16,7 @@ interface CardRestaurantProps {
 }
 
 export default function CardRestaurant({
+  id,
   image,
   title,
   categories,
@@ -24,14 +27,26 @@ export default function CardRestaurant({
 }: CardRestaurantProps) {
   return (
     <Paper elevation={4}>
-      <Box height={200} position="relative">
-        <Image src={image} alt="res-alt" layout="fill" objectFit="cover" />
-      </Box>
+      <Link href={`/restaurants/${id}`}>
+        <Box height={200} position="relative">
+          <Image src={image} alt="res-alt" layout="fill" objectFit="cover" />
+        </Box>
+      </Link>
 
       <Box p={3}>
-        <Typography variant="h5" component="div" sx={{ fontWeight: "500" }}>
-          {title}
-        </Typography>
+        <Link href={`/restaurants/${id}`}>
+          <Typography
+            variant="h5"
+            component="div"
+            sx={{
+              fontWeight: "500",
+              "&:hover": { textDecoration: "underline" },
+            }}
+          >
+            {title}
+          </Typography>
+        </Link>
+
         <Typography sx={{ mb: 2 }} variant="body2" color="text.secondary">
           {categories}
         </Typography>

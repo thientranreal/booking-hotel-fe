@@ -16,15 +16,11 @@ const labels: { [index: string]: string } = {
   5: "Excellent+",
 };
 
-interface Prop {
-  value: number;
-}
-
 function getLabelText(value: number) {
   return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
 }
 
-export default function ResRatingReadOnly({ value }: Prop) {
+export default function ResRatingReadOnly({ value }: { value: number }) {
   return (
     <Box
       sx={{
@@ -40,7 +36,9 @@ export default function ResRatingReadOnly({ value }: Prop) {
         getLabelText={getLabelText}
         emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
       />
-      {value !== null && <Box sx={{ ml: 1 }}>{labels[value]}</Box>}
+      {value !== null && (
+        <Box sx={{ ml: 1 }}>{labels[Math.round(value * 2) / 2]}</Box>
+      )}
     </Box>
   );
 }

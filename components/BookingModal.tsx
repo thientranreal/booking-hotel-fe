@@ -58,8 +58,17 @@ export default function BookingModal({
               justifyContent="center"
               gap={2}
             >
-              <Button variant="contained">Đặt bàn</Button>
-              <Button variant="outlined" onClick={onClose}>
+              <Button
+                variant="contained"
+                sx={{ height: { xs: "4rem", sm: "inherit" } }}
+              >
+                Đặt bàn
+              </Button>
+              <Button
+                variant="outlined"
+                sx={{ height: { xs: "4rem", sm: "inherit" } }}
+                onClick={onClose}
+              >
                 Hủy
               </Button>
             </Box>

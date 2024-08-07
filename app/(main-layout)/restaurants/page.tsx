@@ -10,7 +10,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const restaurantData = [
   {
-    id: 1,
+    id: "1",
     image: "/images/login-table-reserve.jpg",
     title: "test",
     categories: "abc, xyz, ghi",
@@ -19,7 +19,7 @@ const restaurantData = [
     slotsLeft: 3,
   },
   {
-    id: 2,
+    id: "2",
     image: "/images/login-table-reserve.jpg",
     title: "test",
     categories: "abc, xyz, ghi",
@@ -28,7 +28,7 @@ const restaurantData = [
     slotsLeft: 3,
   },
   {
-    id: 3,
+    id: "3",
     image: "/images/login-table-reserve.jpg",
     title: "test",
     categories: "abc, xyz, ghi",
@@ -37,7 +37,7 @@ const restaurantData = [
     slotsLeft: 3,
   },
   {
-    id: 4,
+    id: "4",
     image: "/images/login-table-reserve.jpg",
     title: "test",
     categories: "abc, xyz, ghi",
@@ -59,6 +59,7 @@ export default function Restaurants() {
         {restaurantData.map((restaurant) => (
           <Grid item xs={12} md={6} lg={4} key={restaurant.id}>
             <CardRestaurant
+              id={restaurant.id}
               image={restaurant.image}
               title={restaurant.title}
               categories={restaurant.categories}

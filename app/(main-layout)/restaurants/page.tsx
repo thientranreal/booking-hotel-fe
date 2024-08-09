@@ -41,7 +41,7 @@ const restaurantData = [
     image: "/images/login-table-reserve.jpg",
     title: "test",
     categories: "abc, xyz, ghi",
-    starRatings: 4,
+    starRatings: 2,
     numberPeopelRate: 20000,
     slotsLeft: 3,
   },

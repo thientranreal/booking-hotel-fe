@@ -18,7 +18,7 @@ export default function Overview() {
         </Typography>
 
         <Box display="flex" gap={3} flexDirection={{ xs: "column", sm: "row" }}>
-          <ResRatingReadOnly value={4.3} />
+          <ResRatingReadOnly value={2} />
 
           <Box>
             <ReviewsOutlinedIcon />

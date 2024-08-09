@@ -20,7 +20,13 @@ function getLabelText(value: number) {
   return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
 }
 
-export default function ResRatingReadOnly({ value }: { value: number }) {
+export default function ResRatingReadOnly({
+  value,
+  showLabel = true,
+}: {
+  value: number;
+  showLabel?: boolean;
+}) {
   return (
     <Box
       sx={{
@@ -36,7 +42,7 @@ export default function ResRatingReadOnly({ value }: { value: number }) {
         getLabelText={getLabelText}
         emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
       />
-      {value !== null && (
+      {value !== null && showLabel && (
         <Box sx={{ ml: 1 }}>{labels[Math.round(value * 2) / 2]}</Box>
       )}
     </Box>

@@ -1,6 +1,8 @@
 "use client";
 
 import Overview from "@/components/restaurant-detail/Overview";
+import PhotoRestaurant from "@/components/restaurant-detail/PhotoRestaurant";
+import ReviewSection from "@/components/restaurant-detail/ReviewSection";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Box, Tab } from "@mui/material";
 import Image from "next/image";
@@ -41,9 +43,13 @@ export default function RestaurantDetail() {
         <TabPanel value="1">
           <Overview />
         </TabPanel>
-        <TabPanel value="2">Photos</TabPanel>
+        <TabPanel value="2">
+          <PhotoRestaurant />
+        </TabPanel>
         <TabPanel value="3">Menu</TabPanel>
-        <TabPanel value="4">Reviews</TabPanel>
+        <TabPanel value="4">
+          <ReviewSection />
+        </TabPanel>
       </TabContext>
     </Box>
   );

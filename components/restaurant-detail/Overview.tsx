@@ -62,6 +62,7 @@ export default function Overview() {
           }}
           fullWidth
           variant="contained"
+          sx={{ py: 1.5 }}
         >
           Book a table
         </Button>

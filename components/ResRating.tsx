@@ -20,8 +20,8 @@ function getLabelText(value: number) {
   return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
 }
 
-export default function ResRatingFeedback() {
-  const [value, setValue] = React.useState<number | null>(2);
+export default function ResRating() {
+  const [value, setValue] = React.useState<number | null>(0);
   const [hover, setHover] = React.useState(-1);
 
   return (

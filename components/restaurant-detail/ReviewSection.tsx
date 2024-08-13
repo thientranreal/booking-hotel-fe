@@ -26,15 +26,15 @@ export default function ReviewSection() {
 
           <ResRatingReadOnly value={4} showLabel={false} />
           <Typography mt={1} component="span">
-            trên tổng 23 reviews
+            trên tổng 23 đánh giá
           </Typography>
         </Box>
 
-        <TotalReviewBar title="Excellent" value={50} color="#4CAF50" />
-        <TotalReviewBar title="Good" value={50} color="#00C853" />
-        <TotalReviewBar title="Average" value={70} color="#FFEB3B" />
-        <TotalReviewBar title="Below Average" value={50} color="#FF9800" />
-        <TotalReviewBar title="Poor" value={50} color="#F44336" />
+        <TotalReviewBar title="Rất tốt" value={50} color="#4CAF50" />
+        <TotalReviewBar title="Tốt" value={50} color="#00C853" />
+        <TotalReviewBar title="Trung bình" value={70} color="#FFEB3B" />
+        <TotalReviewBar title="Tệ" value={50} color="#FF9800" />
+        <TotalReviewBar title="Cực tệ" value={50} color="#F44336" />
       </Box>
       {/* End overall review */}
 

@@ -4,16 +4,16 @@ import Box from "@mui/material/Box";
 import StarIcon from "@mui/icons-material/Star";
 
 const labels: { [index: string]: string } = {
-  0.5: "Poor",
-  1: "Poor+",
-  1.5: "Below Average",
-  2: "Below Average+",
-  2.5: "Average",
-  3: "Average+",
-  3.5: "Good",
-  4: "Good+",
-  4.5: "Excellent",
-  5: "Excellent+",
+  0.5: "Cực tệ",
+  1: "Cực tệ+",
+  1.5: "Tệ",
+  2: "Tệ+",
+  2.5: "Trung bình",
+  3: "Trung bình+",
+  3.5: "Tốt",
+  4: "Tốt+",
+  4.5: "Rất tốt",
+  5: "Rất tốt+",
 };
 
 function getLabelText(value: number) {

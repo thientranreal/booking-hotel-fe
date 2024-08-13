@@ -26,8 +26,6 @@ export default function Navbar() {
     <AppBar position="static" sx={{ bgcolor: "white" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
-          <Image src="/images/logo.png" alt="Logo" width={200} height={200} />
-
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -42,7 +40,7 @@ export default function Navbar() {
 
             {/* Sidebar */}
             <Drawer
-              anchor="right"
+              anchor="left"
               open={openSidebar}
               onClose={toggleDrawer(false)}
             >
@@ -55,6 +53,14 @@ export default function Navbar() {
               </Box>
             </Drawer>
             {/* End Sidebar */}
+          </Box>
+
+          <Box
+            flex={{ xs: 1, md: "inherit" }}
+            display="flex"
+            justifyContent="center"
+          >
+            <Image src="/images/logo.png" alt="Logo" width={200} height={200} />
           </Box>
 
           <Box sx={{ display: { xs: "none", md: "flex" } }}>

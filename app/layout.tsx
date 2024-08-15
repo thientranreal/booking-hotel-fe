@@ -3,6 +3,7 @@ import { Roboto } from "next/font/google";
 import "./globals.css";
 import theme from "./theme";
 import { ThemeProvider } from "@mui/material";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -21,9 +22,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ThemeProvider theme={theme}>
-        <body className={`${roboto.className} antialiased`}>{children}</body>
-      </ThemeProvider>
+      <UserProvider>
+        <ThemeProvider theme={theme}>
+          <body className={`${roboto.className} antialiased`}>{children}</body>
+        </ThemeProvider>
+      </UserProvider>
     </html>
   );
 }

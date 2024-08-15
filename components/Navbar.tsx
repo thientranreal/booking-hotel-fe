@@ -124,7 +124,7 @@ export default function Navbar() {
                   <MenuItem
                     key={setting}
                     onClick={handleCloseUserMenu}
-                    component={Link}
+                    component={setting === "Logout" ? "a" : Link}
                     href={
                       setting === "Logout"
                         ? "/api/auth/logout"
@@ -138,18 +138,10 @@ export default function Navbar() {
             </Box>
           ) : (
             <Box display={{ xs: "none", md: "flex" }} py={1} gap={2}>
-              <Button
-                variant="outlined"
-                component={Link}
-                href="/api/auth/login"
-              >
+              <Button variant="outlined" component="a" href="/api/auth/login">
                 Đăng nhập
               </Button>
-              <Button
-                variant="contained"
-                component={Link}
-                href="/api/auth/signup"
-              >
+              <Button variant="contained" component="a" href="/api/auth/signup">
                 Đăng ký
               </Button>
             </Box>
@@ -177,10 +169,10 @@ function SideNav({ isLogin }: { isLogin: boolean }) {
 
       {!isLogin && (
         <Box display="flex" flexDirection="column" gap={2} p={2}>
-          <Button variant="outlined" component={Link} href="/api/auth/login">
+          <Button variant="outlined" component="a" href="/api/auth/login">
             Đăng nhập
           </Button>
-          <Button variant="contained" component={Link} href="/api/auth/signup">
+          <Button variant="contained" component="a" href="/api/auth/signup">
             Đăng ký
           </Button>
         </Box>

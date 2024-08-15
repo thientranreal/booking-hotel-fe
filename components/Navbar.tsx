@@ -18,6 +18,7 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  Skeleton,
   Typography,
 } from "@mui/material";
 import Image from "next/image";
@@ -28,7 +29,7 @@ const pages = ["HOME", "RESTAURANTS", "RESERVATIONS", "CONTACT"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export default function Navbar() {
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
 
   const [openSidebar, setOpenSidebar] = useState<boolean>(false);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -99,53 +100,62 @@ export default function Navbar() {
             ))}
           </Box>
 
-          {user ? (
-            <Box>
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar src={user.picture || ""} alt={user.name || "NA"} />
-              </IconButton>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {settings.map((setting) => (
-                  <MenuItem
-                    key={setting}
-                    onClick={handleCloseUserMenu}
-                    component={setting === "Logout" ? "a" : Link}
-                    href={
-                      setting === "Logout"
-                        ? "/api/auth/logout"
-                        : `/${setting.toLowerCase()}`
-                    }
+          <Box>
+            {isLoading && (
+              <Skeleton variant="circular" width={40} height={40} />
+            )}
+
+            {!isLoading &&
+              (user ? (
+                <>
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar src={user.picture || ""} alt={user.name || "NA"} />
+                  </IconButton>
+                  <Menu
+                    sx={{ mt: "45px" }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                    keepMounted
+                    transformOrigin={{ vertical: "top", horizontal: "right" }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
                   >
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
-          ) : (
-            <Box display={{ xs: "none", md: "flex" }} py={1} gap={2}>
-              <Button variant="outlined" component="a" href="/api/auth/login">
-                Đăng nhập
-              </Button>
-              <Button variant="contained" component="a" href="/api/auth/signup">
-                Đăng ký
-              </Button>
-            </Box>
-          )}
+                    {settings.map((setting) => (
+                      <MenuItem
+                        key={setting}
+                        onClick={handleCloseUserMenu}
+                        component={setting === "Logout" ? "a" : Link}
+                        href={
+                          setting === "Logout"
+                            ? "/api/auth/logout"
+                            : `/${setting.toLowerCase()}`
+                        }
+                      >
+                        <Typography textAlign="center">{setting}</Typography>
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </>
+              ) : (
+                <Box display={{ xs: "none", md: "flex" }} py={1} gap={2}>
+                  <Button
+                    variant="outlined"
+                    component="a"
+                    href="/api/auth/login"
+                  >
+                    Đăng nhập
+                  </Button>
+                  <Button
+                    variant="contained"
+                    component="a"
+                    href="/api/auth/signup"
+                  >
+                    Đăng ký
+                  </Button>
+                </Box>
+              ))}
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>

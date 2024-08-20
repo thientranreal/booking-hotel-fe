@@ -6,6 +6,7 @@ import {
   Input,
   InputAdornment,
   InputLabel,
+  OutlinedInput,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -17,6 +18,7 @@ interface PasswordFieldProps {
   onChange?:
     | React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
     | undefined;
+  variant?: "outlined" | "standard" | undefined;
   error?: boolean;
   helperText?: string;
   inputRef?: React.Ref<any>;
@@ -30,6 +32,7 @@ export default function PasswordField({
   label,
   value,
   onChange,
+  variant = "standard",
   error,
   helperText,
   inputRef,
@@ -45,27 +48,51 @@ export default function PasswordField({
     event.preventDefault();
   };
   return (
-    <FormControl error={error} fullWidth variant="standard">
+    <FormControl error={error} fullWidth variant={variant}>
       <InputLabel htmlFor={id}>{label}</InputLabel>
-      <Input
-        id={id}
-        type={showPassword ? "text" : "password"}
-        value={value}
-        onChange={onChange}
-        inputRef={inputRef}
-        onKeyDown={onKeyDown}
-        endAdornment={
-          <InputAdornment position="end">
-            <IconButton
-              aria-label="toggle password visibility"
-              onClick={handleClickShowPassword}
-              onMouseDown={handleMouseDownPassword}
-            >
-              {showPassword ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
-          </InputAdornment>
-        }
-      />
+      {variant === "standard" ? (
+        <Input
+          id={id}
+          type={showPassword ? "text" : "password"}
+          value={value}
+          onChange={onChange}
+          inputRef={inputRef}
+          onKeyDown={onKeyDown}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          }
+        />
+      ) : (
+        <OutlinedInput
+          id={id}
+          type={showPassword ? "text" : "password"}
+          value={value}
+          onChange={onChange}
+          inputRef={inputRef}
+          onKeyDown={onKeyDown}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+                edge="end"
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          }
+          label={label}
+        />
+      )}
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
   );

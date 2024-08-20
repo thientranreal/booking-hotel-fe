@@ -26,7 +26,11 @@ import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
 
 const pages = ["HOME", "RESTAURANTS", "RESERVATIONS", "CONTACT"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = [
+  { name: "Tài khoản", page: "account" },
+  { name: "Lịch sử đặt", page: "book-history" },
+  { name: "Đăng xuất", page: "logout" },
+];
 
 export default function Navbar() {
   const { user, isLoading } = useUser();
@@ -123,16 +127,18 @@ export default function Navbar() {
                   >
                     {settings.map((setting) => (
                       <MenuItem
-                        key={setting}
+                        key={setting.page}
                         onClick={handleCloseUserMenu}
-                        component={setting === "Logout" ? "a" : Link}
+                        component={setting.page === "logout" ? "a" : Link}
                         href={
-                          setting === "Logout"
+                          setting.page === "logout"
                             ? "/api/auth/logout"
-                            : `/${setting.toLowerCase()}`
+                            : `/${setting.page}`
                         }
                       >
-                        <Typography textAlign="center">{setting}</Typography>
+                        <Typography textAlign="center">
+                          {setting.name}
+                        </Typography>
                       </MenuItem>
                     ))}
                   </Menu>

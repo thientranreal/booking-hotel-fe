@@ -152,13 +152,6 @@ export default function Navbar() {
                   >
                     Đăng nhập
                   </Button>
-                  <Button
-                    variant="contained"
-                    component="a"
-                    href="/api/auth/signup"
-                  >
-                    Đăng ký
-                  </Button>
                 </Box>
               ))}
           </Box>

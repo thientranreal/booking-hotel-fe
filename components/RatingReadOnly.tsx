@@ -20,10 +20,15 @@ function getLabelText(value: number) {
   return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
 }
 
-export default function ResRating() {
-  const [value, setValue] = React.useState<number | null>(0);
-  const [hover, setHover] = React.useState(-1);
-
+export default function RatingReadOnly({
+  value,
+  showLabel = true,
+  size,
+}: {
+  value: number;
+  showLabel?: boolean;
+  size: "small" | "medium" | "large";
+}) {
   return (
     <Box
       sx={{
@@ -32,20 +37,16 @@ export default function ResRating() {
       }}
     >
       <Rating
+        size={size}
         name="hover-feedback"
+        readOnly
         value={value}
         precision={0.5}
         getLabelText={getLabelText}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-        onChangeActive={(event, newHover) => {
-          setHover(newHover);
-        }}
         emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
       />
-      {value !== null && (
-        <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
+      {value !== null && showLabel && (
+        <Box sx={{ ml: 1 }}>{labels[Math.round(value * 2) / 2]}</Box>
       )}
     </Box>
   );

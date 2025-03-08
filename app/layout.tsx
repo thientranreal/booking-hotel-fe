@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
-import theme from "./theme";
-import { ThemeProvider } from "@mui/material";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 const roboto = Roboto({
@@ -23,9 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <UserProvider>
-        <ThemeProvider theme={theme}>
-          <body className={`${roboto.className} antialiased`}>{children}</body>
-        </ThemeProvider>
+        <body className={`${roboto.className} antialiased`}>{children}</body>
       </UserProvider>
     </html>
   );

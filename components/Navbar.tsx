@@ -11,6 +11,7 @@ import { useState } from "react";
 import {
   Avatar,
   Button,
+  Dialog,
   Divider,
   List,
   ListItem,
@@ -21,11 +22,15 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { useSearchParams } from "next/navigation";
+import SearchBar from "./SearchBar";
+import dayjs from "dayjs";
 
-const pages = ["HOME", "RESTAURANTS", "RESERVATIONS", "CONTACT"];
+const pages = ["RESERVATIONS"];
 const settings = [
   { name: "Tài khoản", page: "account" },
   { name: "Lịch sử đặt", page: "book-history" },
@@ -33,9 +38,12 @@ const settings = [
 ];
 
 export default function Navbar() {
+  const searchParams = useSearchParams();
+
   const { user, isLoading } = useUser();
 
   const [openSidebar, setOpenSidebar] = useState<boolean>(false);
+  const [openSearch, setOpenSearch] = useState<boolean>(false);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleCloseUserMenu = () => {
@@ -51,9 +59,18 @@ export default function Navbar() {
   };
 
   return (
-    <AppBar position="static" sx={{ bgcolor: "white" }}>
+    <AppBar
+      position="static"
+      sx={{
+        bgcolor: "white",
+        color: "black",
+        boxShadow: "none",
+        borderBottom: "1px solid rgba(0, 0, 0, 0.5)",
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
+          {/* Menu for mobile view */}
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -82,29 +99,85 @@ export default function Navbar() {
             </Drawer>
             {/* End Sidebar */}
           </Box>
-
+          {/* End Menu for mobile view */}
           <Box
             flex={{ xs: 1, md: "inherit" }}
-            display="flex"
+            display={{ xs: "none", md: "flex" }}
             justifyContent="center"
+            component={Link}
+            href="/"
           >
             <Image src="/images/logo.png" alt="Logo" width={200} height={200} />
           </Box>
 
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            {pages.map((text) => (
-              <Button
-                key={text}
-                sx={{ my: 2, color: "black", display: "block" }}
-                component={Link}
-                href={text === "HOME" ? "/" : `/${text.toLowerCase()}`}
+          {/* Search box */}
+          {searchParams.size > 0 && (
+            <>
+              <Box
+                onClick={() => setOpenSearch(true)}
+                display="flex"
+                gap={2}
+                alignItems="center"
+                borderRadius={20}
+                boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
+                p="5px"
+                sx={{
+                  "&:hover": {
+                    cursor: "pointer",
+                    opacity: "80%",
+                  },
+                }}
               >
-                {text}
-              </Button>
-            ))}
-          </Box>
+                <Typography fontWeight="bold" pl={1}>
+                  {searchParams.get("place")}
+                </Typography>
+                <Divider orientation="vertical" flexItem />
 
-          <Box>
+                <Typography fontWeight="bold">
+                  {searchParams.get("fromDate")}
+                </Typography>
+                <Typography fontWeight="bold">
+                  {searchParams.get("untilDate")}
+                </Typography>
+                <Divider orientation="vertical" flexItem />
+
+                <Typography fontWeight="bold">
+                  {searchParams.get("guests")} người
+                </Typography>
+
+                <IconButton aria-label="search">
+                  <SearchIcon />
+                </IconButton>
+              </Box>
+              <Dialog open={openSearch} onClose={() => setOpenSearch(false)}>
+                <Box p={5}>
+                  <SearchBar
+                    placeInput={searchParams.get("place") || ""}
+                    checkInDateInput={dayjs(searchParams.get("fromDate"))}
+                    checkOutDateInput={dayjs(searchParams.get("untilDate"))}
+                    guestsInput={Number(searchParams.get("guests")) || 2}
+                    setOpenSearch={setOpenSearch}
+                  />
+                </Box>
+              </Dialog>
+            </>
+          )}
+          {/* End Search box */}
+
+          <Box display="flex">
+            <Box sx={{ display: { xs: "none", md: "flex" }, mr: 2 }}>
+              {pages.map((text) => (
+                <Button
+                  key={text}
+                  sx={{ my: 2, color: "black", display: "block" }}
+                  component={Link}
+                  href={`/${text.toLowerCase()}`}
+                >
+                  {text}
+                </Button>
+              ))}
+            </Box>
+
             {isLoading && (
               <Skeleton variant="circular" width={40} height={40} />
             )}
@@ -167,10 +240,7 @@ function SideNav({ isLogin }: { isLogin: boolean }) {
       <Divider sx={{ mt: "5rem" }} />
       {pages.map((text) => (
         <ListItem key={text} disablePadding>
-          <ListItemButton
-            component={Link}
-            href={text === "HOME" ? "/" : `/${text.toLowerCase()}`}
-          >
+          <ListItemButton component={Link} href={`/${text.toLowerCase()}`}>
             <ListItemText primary={text} />
           </ListItemButton>
         </ListItem>
@@ -180,9 +250,6 @@ function SideNav({ isLogin }: { isLogin: boolean }) {
         <Box display="flex" flexDirection="column" gap={2} p={2}>
           <Button variant="outlined" component="a" href="/api/auth/login">
             Đăng nhập
-          </Button>
-          <Button variant="contained" component="a" href="/api/auth/signup">
-            Đăng ký
           </Button>
         </Box>
       )}

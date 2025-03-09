@@ -1,11 +1,10 @@
-import { Box, Button, Grid, Typography, Chip, Divider } from "@mui/material";
+import { Box, Button, Grid, Typography, Chip } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PetsIcon from "@mui/icons-material/Pets";
 import LocalBarIcon from "@mui/icons-material/LocalBar";
 import LocalParkingIcon from "@mui/icons-material/LocalParking";
 import Image from "next/image";
 import RatingReadOnly from "../RatingReadOnly";
-import RoomCard from "../RoomCard";
 
 const images = [
   "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg",
@@ -15,7 +14,11 @@ const images = [
   "https://images.pexels.com/photos/2507010/pexels-photo-2507010.jpeg?auto=compress&cs=tinysrgb&w=1200",
 ];
 
-export default function Overview() {
+export default function Overview({
+  setValue,
+}: {
+  setValue: (value: string) => void;
+}) {
   return (
     <Box>
       <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -38,7 +41,11 @@ export default function Overview() {
         </Box>
 
         <Box>
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setValue("2")}
+          >
             Đặt phòng
           </Button>
         </Box>
@@ -105,20 +112,6 @@ export default function Overview() {
           icon={<PetsIcon />}
         />
       </Box>
-
-      <Divider sx={{ my: 5 }} />
-
-      <Typography variant="h6" gutterBottom>
-        Chọn phòng của bạn
-      </Typography>
-
-      <RoomCard
-        images={images}
-        name="Queen Room"
-        type="1 queen"
-        amenities={["Free Wi-Fi", "Máy lạnh"]}
-        price={200000}
-      />
     </Box>
   );
 }

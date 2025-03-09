@@ -118,6 +118,7 @@ export default function Navbar() {
                 display="flex"
                 gap={2}
                 alignItems="center"
+                justifyContent="space-between"
                 borderRadius={20}
                 boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
                 p="5px"
@@ -128,20 +129,43 @@ export default function Navbar() {
                   },
                 }}
               >
-                <Typography fontWeight="bold" pl={1}>
+                <Typography
+                  fontWeight="bold"
+                  pl={2}
+                  maxWidth={150}
+                  sx={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
                   {searchParams.get("place")}
                 </Typography>
                 <Divider orientation="vertical" flexItem />
 
-                <Typography fontWeight="bold">
-                  {searchParams.get("fromDate")}
-                </Typography>
-                <Typography fontWeight="bold">
-                  {searchParams.get("untilDate")}
-                </Typography>
+                <Box
+                  maxWidth={200}
+                  display="flex"
+                  justifyContent="space-between"
+                >
+                  <Typography fontWeight="bold" mr={2}>
+                    {searchParams.get("fromDate")}
+                  </Typography>
+                  <Typography fontWeight="bold">
+                    {searchParams.get("untilDate")}
+                  </Typography>
+                </Box>
                 <Divider orientation="vertical" flexItem />
 
-                <Typography fontWeight="bold">
+                <Typography
+                  fontWeight="bold"
+                  maxWidth={70}
+                  sx={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
                   {searchParams.get("guests")} người
                 </Typography>
 

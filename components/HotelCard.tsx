@@ -1,6 +1,7 @@
 import { Typography, Button, Box } from "@mui/material";
 import RatingReadOnly from "./RatingReadOnly";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function HotelCard() {
   return (
@@ -28,9 +29,11 @@ export default function HotelCard() {
         display="flex"
         flexDirection="column"
       >
-        <Typography fontWeight="bold" component="div">
-          Hôtel Littéraire Alexandre Vialatte, BW Signature Collection
-        </Typography>
+        <Link href="/">
+          <Typography fontWeight="bold" component="div">
+            Hôtel Littéraire Alexandre Vialatte, BW Signature Collection
+          </Typography>
+        </Link>
         <Box display="flex" alignItems="center" gap={0.5}>
           <RatingReadOnly value={3} showLabel={false} size="small" />
           <span>-</span>

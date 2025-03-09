@@ -18,7 +18,7 @@ export default function RoomCard({
   return (
     <Box
       sx={{
-        maxWidth: 350,
+        width: 350,
         height: 425,
         border: "1px solid rgba(0, 0, 0, 0.5)",
         borderRadius: "10px",

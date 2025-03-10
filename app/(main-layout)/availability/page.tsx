@@ -4,6 +4,7 @@ import HotelCard from "@/components/HotelCard";
 import {
   Box,
   Checkbox,
+  CircularProgress,
   Divider,
   FormControl,
   FormControlLabel,
@@ -14,7 +15,7 @@ import {
   SelectChangeEvent,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 export default function Availability() {
   const [sortBy, setSortBy] = useState("");
@@ -127,7 +128,9 @@ export default function Availability() {
         </Box>
 
         {/* Display hotel */}
-        <HotelCard />
+        <Suspense fallback={<CircularProgress />}>
+          <HotelCard />
+        </Suspense>
       </Box>
     </Box>
   );

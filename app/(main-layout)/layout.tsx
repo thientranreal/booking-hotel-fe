@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
-import { Container } from "@mui/material";
+import { CircularProgress, Container } from "@mui/material";
+import { Suspense } from "react";
 
 export default function MainLayout({
   children,
@@ -8,7 +9,9 @@ export default function MainLayout({
 }>) {
   return (
     <section>
-      <Navbar />
+      <Suspense fallback={<CircularProgress />}>
+        <Navbar />
+      </Suspense>
       <Container sx={{ py: 5 }}>{children}</Container>
     </section>
   );

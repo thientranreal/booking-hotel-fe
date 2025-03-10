@@ -188,7 +188,7 @@ export default function Navbar() {
           )}
           {/* End Search box */}
 
-          <Box display="flex">
+          <Box display="flex" alignItems="center">
             <Box sx={{ display: { xs: "none", md: "flex" }, mr: 2 }}>
               {pages.map((text) => (
                 <Button

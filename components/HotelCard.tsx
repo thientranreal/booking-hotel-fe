@@ -2,8 +2,10 @@ import { Typography, Button, Box } from "@mui/material";
 import RatingReadOnly from "./RatingReadOnly";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function HotelCard() {
+  const searchParams = useSearchParams();
   return (
     <Box
       sx={{
@@ -29,7 +31,7 @@ export default function HotelCard() {
         display="flex"
         flexDirection="column"
       >
-        <Link href="/">
+        <Link href={`/hotels/1?${searchParams.toString()}`}>
           <Typography fontWeight="bold" component="div">
             Hôtel Littéraire Alexandre Vialatte, BW Signature Collection
           </Typography>

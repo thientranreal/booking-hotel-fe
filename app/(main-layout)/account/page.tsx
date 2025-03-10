@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { getSession } from "@auth0/nextjs-auth0";
 import { redirect } from "next/navigation";
-import AccountMod from "@/components/AccountMod";
+// import AccountMod from "@/components/AccountMod";
 
 export default async function Account() {
   const session = await getSession();
@@ -31,7 +31,7 @@ export default async function Account() {
           <Typography variant="h6">{user.name}</Typography>
         </Box>
 
-        <AccountMod />
+        {/* <AccountMod /> */}
       </Paper>
     </Container>
   );

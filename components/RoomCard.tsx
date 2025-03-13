@@ -1,6 +1,7 @@
 import { Box, Button, Divider, Typography } from "@mui/material";
 import ImageSlider from "./ImageSlider";
 import BedIcon from "@mui/icons-material/Bed";
+import Link from "next/link";
 
 export default function RoomCard({
   images,
@@ -71,7 +72,7 @@ export default function RoomCard({
 
           <Box>
             <Button variant="contained" color="primary">
-              Đặt phòng
+              <Link href="/hotels/book">Đặt phòng</Link>
             </Button>
           </Box>
         </Box>

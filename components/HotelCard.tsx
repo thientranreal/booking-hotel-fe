@@ -9,8 +9,8 @@ export default function HotelCard() {
   return (
     <Box
       sx={{
-        maxWidth: 804,
-        maxHeight: 284,
+        width: 804,
+        height: 274,
         p: 2,
         display: "flex",
         border: "1px solid rgba(0, 0, 0, 0.5)",

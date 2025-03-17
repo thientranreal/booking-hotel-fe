@@ -1,11 +1,27 @@
 "use client";
 
-import { Box, Dialog, Divider, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  Divider,
+  Rating,
+  TextField,
+  Typography,
+} from "@mui/material";
 import RatingReadOnly from "../RatingReadOnly";
 import ReviewsCarousel from "./ReviewsCarousel";
 import { useState } from "react";
 
-const reviews = [
+type Review = {
+  id: number;
+  title: string;
+  content: string;
+  rating: number;
+  date: string;
+};
+
+const reviewsDump = [
   {
     id: 1,
     title:
@@ -65,6 +81,26 @@ const reviews = [
 export default function Review() {
   const [openReview, setOpenReview] = useState<boolean>(false);
 
+  const [reviews, setReviews] = useState<Review[]>(reviewsDump);
+  const [rating, setRating] = useState<number | null>(0);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [error, setError] = useState<string>("");
+
+  // Handle form submission
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!title || !rating || !content) {
+      setError("Hãy điền đủ thông tin!");
+      return;
+    }
+
+    setRating(0);
+    setTitle("");
+    setContent("");
+    setError("");
+  };
+
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
@@ -111,6 +147,57 @@ export default function Review() {
         </Box>
       </Dialog>
       {/* End show review detail */}
+
+      <Divider sx={{ my: 3 }} />
+
+      {/* Review section */}
+      <Box sx={{ maxWidth: "800px", margin: "auto", padding: 3 }}>
+        <Typography variant="h4" align="center" gutterBottom>
+          Đánh giá của bạn
+        </Typography>
+
+        {/* Display error if any */}
+        {error && (
+          <Typography color="error" align="center">
+            {error}
+          </Typography>
+        )}
+
+        {/* Review Submission Form */}
+        <Box component="form" onSubmit={handleSubmit}>
+          <Typography variant="h6">Viết đánh giá</Typography>
+
+          <Rating
+            value={rating}
+            onChange={(_, newValue) => setRating(newValue)}
+            precision={0.5}
+            sx={{ marginBottom: 2 }}
+          />
+          <TextField
+            label="Tiêu đề"
+            multiline
+            fullWidth
+            margin="normal"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+          <TextField
+            label="Viết đánh giá"
+            multiline
+            rows={4}
+            fullWidth
+            margin="normal"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            required
+          />
+          <Button variant="contained" type="submit" fullWidth sx={{ mt: 2 }}>
+            Đăng review của bạn
+          </Button>
+        </Box>
+      </Box>
+      {/* End review section */}
     </Box>
   );
 }

@@ -1,15 +1,21 @@
 "use client";
 
 import { Button, TextField, Grid, Typography, Box } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { validateEmail, validatePhoneNumber } from "@/utils/validators";
+import { LoadingButton } from "@mui/lab";
+import { userCreate } from "@/app/api/user";
+import { toast } from "react-toastify";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
@@ -17,6 +23,7 @@ export default function Signup() {
     e.preventDefault();
     if (
       email === "" ||
+      name === "" ||
       phone === "" ||
       password === "" ||
       confirmPassword === ""
@@ -24,11 +31,36 @@ export default function Signup() {
       setError("Chưa nhập đủ thông tin!");
     } else if (password !== confirmPassword) {
       setError("Mật khẩu không khớp!");
+    } else if (!validateEmail(email)) {
+      setError("Email không hợp lệ!");
+    } else if (!validatePhoneNumber(phone)) {
+      setError("Số điện thoại không hợp lệ!");
     } else {
       setError("");
-      router.push("/login");
+      setIsLoading(true);
     }
   };
+
+  useEffect(() => {
+    if (isLoading) {
+      const registerUser = async () => {
+        const data = await userCreate(email, name, phone, password);
+        console.log(data);
+
+        if (data.errors) {
+          const errorMsg = data.errors[0].message;
+          toast.error(errorMsg);
+        } else {
+          toast.success("Tạo tài khoản thành công");
+          router.push("/login");
+        }
+
+        setIsLoading(false);
+      };
+
+      registerUser();
+    }
+  }, [isLoading]);
 
   return (
     <Box
@@ -51,6 +83,14 @@ export default function Signup() {
           margin="normal"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <TextField
+          label="Tên"
+          fullWidth
+          margin="normal"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           required
         />
         <TextField
@@ -79,9 +119,16 @@ export default function Signup() {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
-        <Button variant="contained" fullWidth type="submit" sx={{ mt: 2 }}>
+        <LoadingButton
+          loading={isLoading}
+          loadingPosition="end"
+          variant="contained"
+          fullWidth
+          type="submit"
+          sx={{ mt: 2 }}
+        >
           Đăng ký
-        </Button>
+        </LoadingButton>
       </form>
       <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
         <Grid item>

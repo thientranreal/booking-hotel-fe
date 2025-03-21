@@ -10,6 +10,14 @@ import Overview from "@/components/HotelDetail/Overview";
 import InfoPrice from "@/components/HotelDetail/InfoPrice";
 import Review from "@/components/HotelDetail/Review";
 
+const images = [
+  "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg",
+  "https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  "https://images.pexels.com/photos/53464/sheraton-palace-hotel-lobby-architecture-san-francisco-53464.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  "https://images.pexels.com/photos/2507010/pexels-photo-2507010.jpeg?auto=compress&cs=tinysrgb&w=1200",
+];
+
 export default function HotelDetail() {
   const [value, setValue] = useState("1");
 
@@ -29,7 +37,15 @@ export default function HotelDetail() {
         </Box>
 
         <TabPanel value="1">
-          <Overview setValue={setValue} />
+          <Overview
+            name="Lorem ip"
+            address="Lorem ipum"
+            score={3.5}
+            description="Lorem ipsum dolor sit amet consectetur adipisicing elit. A est inventore, voluptatibus, recusandae ullam quo nemo voluptates impedit, cumque voluptate iure eveniet esse saepe quas aut corrupti eos quibusdam perspiciatis."
+            images={images}
+            amenities={["Wifi", "Lorem", "Lorem2"]}
+            setValue={setValue}
+          />
         </TabPanel>
 
         <TabPanel value="2">

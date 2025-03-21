@@ -1,15 +1,62 @@
 "use client";
 
+import { isTokenExpired } from "@/utils/auth";
 import { Button, TextField, Grid, Typography, Box } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { userLogin } from "@/app/api/user";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token && !isTokenExpired(token)) {
+      router.push("/");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isLoading) {
+      const login = async () => {
+        // Login from payload
+        const data = await userLogin(email, password);
+
+        if (data.errors) {
+          const errorMsg = data.errors[0].message;
+
+          if (errorMsg === "The email or password provided is incorrect.") {
+            toast.error("Email hoặc mật khẩu không đúng");
+          } else if (
+            errorMsg ===
+            "This user is locked due to having too many failed login attempts."
+          ) {
+            toast.error(
+              "Tài khoản của bạn bị khóa vì đăng nhập thất bại nhiều lần"
+            );
+          } else {
+            toast.error("Đăng nhập thất bại " + errorMsg);
+          }
+        } else {
+          console.log("Đăng nhập thành công ", data);
+          localStorage.setItem("token", data.token);
+          toast.success("Đăng nhập thành công");
+          router.push("/");
+        }
+
+        setIsLoading(false);
+      };
+
+      login();
+    }
+  }, [isLoading]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -17,7 +64,7 @@ export default function Login() {
       setError("All fields are required!");
     } else {
       setError("");
-      router.push("/");
+      setIsLoading(true);
     }
   };
 
@@ -53,9 +100,16 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <Button variant="contained" fullWidth type="submit" sx={{ mt: 2 }}>
+        <LoadingButton
+          loading={isLoading}
+          loadingPosition="end"
+          variant="contained"
+          fullWidth
+          type="submit"
+          sx={{ mt: 2 }}
+        >
           Đăng nhập
-        </Button>
+        </LoadingButton>
       </form>
       <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
         <Grid item>

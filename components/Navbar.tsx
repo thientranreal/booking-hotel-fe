@@ -7,7 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Drawer from "@mui/material/Drawer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Avatar,
   Button,
@@ -19,16 +19,15 @@ import {
   ListItemText,
   Menu,
   MenuItem,
-  Skeleton,
   Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import Image from "next/image";
 import Link from "next/link";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { useSearchParams } from "next/navigation";
 import SearchBar from "./SearchBar";
 import dayjs from "dayjs";
+import { isTokenExpired } from "@/utils/auth";
 
 const pages = ["RESERVATIONS"];
 const settings = [
@@ -40,7 +39,7 @@ const settings = [
 export default function Navbar() {
   const searchParams = useSearchParams();
 
-  const { user, isLoading } = useUser();
+  const [token, setToken] = useState<string | null>(null);
 
   const [openSidebar, setOpenSidebar] = useState<boolean>(false);
   const [openSearch, setOpenSearch] = useState<boolean>(false);
@@ -57,6 +56,15 @@ export default function Navbar() {
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpenSidebar(newOpen);
   };
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const storedToken = localStorage.getItem("token");
+      setToken(storedToken);
+    };
+
+    checkUser();
+  }, []);
 
   return (
     <AppBar
@@ -94,7 +102,7 @@ export default function Navbar() {
                 role="presentation"
                 onClick={toggleDrawer(false)}
               >
-                <SideNav isLogin={!!user} />
+                <SideNav isLogin={!!token && !isTokenExpired(token)} />
               </Box>
             </Drawer>
             {/* End Sidebar */}
@@ -202,55 +210,61 @@ export default function Navbar() {
               ))}
             </Box>
 
-            {isLoading && (
-              <Skeleton variant="circular" width={40} height={40} />
+            {token && !isTokenExpired(token) ? (
+              <>
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt={"NA"} />
+                </IconButton>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                  keepMounted
+                  transformOrigin={{ vertical: "top", horizontal: "right" }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {settings.map((setting) => {
+                    if (setting.page === "logout") {
+                      return (
+                        <MenuItem
+                          key={setting.page}
+                          onClick={() => {
+                            handleCloseUserMenu();
+                            localStorage.removeItem("token");
+                            setToken(null);
+                          }}
+                        >
+                          <Typography textAlign="center">
+                            {setting.name}
+                          </Typography>
+                        </MenuItem>
+                      );
+                    } else {
+                      return (
+                        <MenuItem
+                          key={setting.page}
+                          onClick={handleCloseUserMenu}
+                          component={Link}
+                          href={`/${setting.page}`}
+                        >
+                          <Typography textAlign="center">
+                            {setting.name}
+                          </Typography>
+                        </MenuItem>
+                      );
+                    }
+                  })}
+                </Menu>
+              </>
+            ) : (
+              <Box display={{ xs: "none", md: "flex" }} py={1} gap={2}>
+                <Button variant="outlined" component="a" href="/login">
+                  Đăng nhập
+                </Button>
+              </Box>
             )}
-
-            {!isLoading &&
-              (user ? (
-                <>
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar src={user.picture || ""} alt={user.name || "NA"} />
-                  </IconButton>
-                  <Menu
-                    sx={{ mt: "45px" }}
-                    id="menu-appbar"
-                    anchorEl={anchorElUser}
-                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                    keepMounted
-                    transformOrigin={{ vertical: "top", horizontal: "right" }}
-                    open={Boolean(anchorElUser)}
-                    onClose={handleCloseUserMenu}
-                  >
-                    {settings.map((setting) => (
-                      <MenuItem
-                        key={setting.page}
-                        onClick={handleCloseUserMenu}
-                        component={setting.page === "logout" ? "a" : Link}
-                        href={
-                          setting.page === "logout"
-                            ? "/api/auth/logout"
-                            : `/${setting.page}`
-                        }
-                      >
-                        <Typography textAlign="center">
-                          {setting.name}
-                        </Typography>
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                </>
-              ) : (
-                <Box display={{ xs: "none", md: "flex" }} py={1} gap={2}>
-                  <Button
-                    variant="outlined"
-                    component="a"
-                    href="/api/auth/login"
-                  >
-                    Đăng nhập
-                  </Button>
-                </Box>
-              ))}
           </Box>
         </Toolbar>
       </Container>
@@ -272,7 +286,7 @@ function SideNav({ isLogin }: { isLogin: boolean }) {
 
       {!isLogin && (
         <Box display="flex" flexDirection="column" gap={2} p={2}>
-          <Button variant="outlined" component="a" href="/api/auth/login">
+          <Button variant="outlined" component="a" href="/login">
             Đăng nhập
           </Button>
         </Box>

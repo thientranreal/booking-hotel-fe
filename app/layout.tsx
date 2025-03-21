@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
-import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { ToastContainer } from "react-toastify";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -20,9 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <UserProvider>
-        <body className={`${roboto.className} antialiased`}>{children}</body>
-      </UserProvider>
+      <body className={`${roboto.className} antialiased`}>
+        <ToastContainer position="top-right" autoClose={3000} />
+        {children}
+      </body>
     </html>
   );
 }

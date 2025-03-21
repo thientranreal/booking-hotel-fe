@@ -1,11 +1,10 @@
 "use client";
 
-import { isTokenExpired } from "@/utils/auth";
 import { Button, TextField, Grid, Typography, Box } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { userLogin } from "@/app/api/user";
+import { currentUser, userLogin } from "@/app/api/user";
 import { toast } from "react-toastify";
 
 export default function Login() {
@@ -17,10 +16,17 @@ export default function Login() {
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token && !isTokenExpired(token)) {
-      router.push("/");
-    }
+    const checkLogin = async () => {
+      const data = await currentUser();
+
+      console.log("Current user", data);
+
+      if (data.user) {
+        router.push("/");
+      }
+    };
+
+    checkLogin();
   }, []);
 
   useEffect(() => {
@@ -46,7 +52,6 @@ export default function Login() {
           }
         } else {
           console.log("Đăng nhập thành công ", data);
-          localStorage.setItem("token", data.token);
           toast.success("Đăng nhập thành công");
           router.push("/");
         }

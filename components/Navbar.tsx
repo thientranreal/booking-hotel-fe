@@ -27,7 +27,8 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import SearchBar from "./SearchBar";
 import dayjs from "dayjs";
-import { isTokenExpired } from "@/utils/auth";
+import { currentUser, userLogout } from "@/app/api/user";
+import { toast } from "react-toastify";
 
 const pages = ["RESERVATIONS"];
 const settings = [
@@ -39,7 +40,7 @@ const settings = [
 export default function Navbar() {
   const searchParams = useSearchParams();
 
-  const [token, setToken] = useState<string | null>(null);
+  const [isLogin, setIsLogin] = useState<boolean>(false);
 
   const [openSidebar, setOpenSidebar] = useState<boolean>(false);
   const [openSearch, setOpenSearch] = useState<boolean>(false);
@@ -58,12 +59,17 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    const checkUser = async () => {
-      const storedToken = localStorage.getItem("token");
-      setToken(storedToken);
+    const checkLogin = async () => {
+      const data = await currentUser();
+
+      console.log("Current user", data);
+
+      if (data.user) {
+        setIsLogin(true);
+      }
     };
 
-    checkUser();
+    checkLogin();
   }, []);
 
   return (
@@ -102,7 +108,7 @@ export default function Navbar() {
                 role="presentation"
                 onClick={toggleDrawer(false)}
               >
-                <SideNav isLogin={!!token && !isTokenExpired(token)} />
+                <SideNav isLogin={isLogin} />
               </Box>
             </Drawer>
             {/* End Sidebar */}
@@ -210,7 +216,7 @@ export default function Navbar() {
               ))}
             </Box>
 
-            {token && !isTokenExpired(token) ? (
+            {isLogin ? (
               <>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt={"NA"} />
@@ -230,10 +236,18 @@ export default function Navbar() {
                       return (
                         <MenuItem
                           key={setting.page}
-                          onClick={() => {
+                          onClick={async () => {
                             handleCloseUserMenu();
-                            localStorage.removeItem("token");
-                            setToken(null);
+
+                            const data = await userLogout();
+                            console.log(data);
+                            if (data.errors) {
+                              toast.error(
+                                "Đăng xuất thất bại " + data.errors[0].message
+                              );
+                            } else {
+                              toast.success("Đăng xuất thành công");
+                            }
                           }}
                         >
                           <Typography textAlign="center">

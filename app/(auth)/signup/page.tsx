@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { validateEmail, validatePhoneNumber } from "@/utils/validators";
 import { LoadingButton } from "@mui/lab";
-import { userCreate } from "@/app/api/user";
+import { userCreate, userLogout } from "@/app/api/user";
 import { toast } from "react-toastify";
 
 export default function Signup() {
@@ -52,6 +52,9 @@ export default function Signup() {
           toast.error(errorMsg);
         } else {
           toast.success("Tạo tài khoản thành công");
+
+          // Logout current user if exist
+          await userLogout();
           router.push("/login");
         }
 

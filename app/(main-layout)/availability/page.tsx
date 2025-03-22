@@ -3,6 +3,7 @@
 import HotelCard from "@/components/HotelCard";
 import {
   Box,
+  Button,
   Checkbox,
   CircularProgress,
   Divider,
@@ -13,14 +14,19 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Slider,
   Typography,
 } from "@mui/material";
-import { Suspense, useState } from "react";
+import SearchIcon from "@mui/icons-material/Search";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 
 export default function Availability() {
-  const [sortBy, setSortBy] = useState("");
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  const [facilities, setFacilities] = useState([
+  const [sortBy, setSortBy] = useState("");
+  const [amenities, setAmenities] = useState([
     { name: "Hồ bơi", check: false },
     { name: "Spa", check: false },
     { name: "Gym", check: false },
@@ -38,9 +44,75 @@ export default function Availability() {
     { name: "5 sao", check: false },
   ]);
 
+  const [priceRange, setPriceRange] = useState<[number, number]>([
+    150000, 300000,
+  ]);
+
+  const handleChangePriceRange = (
+    _event: Event,
+    newValue: number | number[]
+  ) => {
+    setPriceRange(newValue as [number, number]);
+  };
+
   const handleSelectSortBy = (event: SelectChangeEvent) => {
     setSortBy(event.target.value as string);
   };
+
+  const handleSearch = () => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (sortBy) {
+      params.set("sortBy", sortBy);
+    } else {
+      params.delete("sortBy");
+    }
+
+    params.delete("star");
+    star
+      .filter((item) => item.check)
+      .forEach((item) => params.append("star", item.name[0]));
+
+    params.delete("amenities");
+    amenities
+      .filter((item) => item.check)
+      .forEach((item) => params.append("amenities", item.name));
+
+    params.set("priceFrom", String(priceRange[0]));
+    params.set("priceTo", String(priceRange[1]));
+
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
+
+  useEffect(() => {
+    if (searchParams.get("priceFrom") && searchParams.get("priceTo")) {
+      setPriceRange([
+        Number(searchParams.get("priceFrom")),
+        Number(searchParams.get("priceTo")),
+      ]);
+    } else {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("priceFrom", String(priceRange[0]));
+      params.set("priceTo", String(priceRange[1]));
+      router.replace(`?${params.toString()}`, { scroll: false });
+    }
+
+    const selectedAmenities = searchParams.getAll("amenities");
+    setAmenities((prevAmenities) =>
+      prevAmenities.map((item) => ({
+        ...item,
+        check: selectedAmenities.includes(item.name),
+      }))
+    );
+
+    const selectedStars = searchParams.getAll("star");
+    setStar((prev) =>
+      prev.map((item) => ({
+        ...item,
+        check: selectedStars.includes(item.name[0]),
+      }))
+    );
+  }, [searchParams]);
 
   return (
     <Box display="flex">
@@ -58,6 +130,22 @@ export default function Availability() {
         <Box>
           <Typography fontWeight="bold">Lọc theo:</Typography>
           <Typography>Giá (mỗi đêm):</Typography>
+
+          <Box width={250}>
+            <Slider
+              value={priceRange}
+              onChange={handleChangePriceRange}
+              valueLabelDisplay="auto"
+              min={150000}
+              max={1000000}
+              step={50000}
+            />
+            <Typography variant="body2">
+              Giá từ:{" "}
+              <b>{new Intl.NumberFormat("vi-VN").format(priceRange[0])}</b> đến{" "}
+              <b>{new Intl.NumberFormat("vi-VN").format(priceRange[1])}</b> VNĐ
+            </Typography>
+          </Box>
         </Box>
 
         <Divider />
@@ -65,16 +153,16 @@ export default function Availability() {
         <Box>
           <Typography fontWeight="bold">Cơ sở vật chất</Typography>
           <FormGroup>
-            {facilities.map((element, index) => (
+            {amenities.map((element, index) => (
               <FormControlLabel
                 key={element.name}
                 control={
                   <Checkbox
                     checked={element.check}
                     onChange={(event) => {
-                      let temp = [...facilities];
+                      let temp = [...amenities];
                       temp[index].check = event.target.checked;
-                      setFacilities(temp);
+                      setAmenities(temp);
                     }}
                   />
                 }
@@ -107,6 +195,16 @@ export default function Availability() {
             ))}
           </FormGroup>
         </Box>
+
+        <Divider />
+
+        <Button
+          onClick={handleSearch}
+          variant="contained"
+          endIcon={<SearchIcon />}
+        >
+          Tìm kiếm
+        </Button>
       </Box>
 
       {/* Right */}

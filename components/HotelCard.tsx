@@ -25,6 +25,21 @@ export default function HotelCard() {
     const fromDate = searchParams.get("fromDate");
     const untilDate = searchParams.get("untilDate");
     const guests = searchParams.get("guests");
+    const priceFrom = searchParams.get("priceFrom");
+    const priceTo = searchParams.get("priceTo");
+    const amenities = searchParams.getAll("amenities");
+    const stars = searchParams.getAll("star");
+
+    console.log(
+      place,
+      fromDate,
+      untilDate,
+      guests,
+      priceFrom,
+      priceTo,
+      amenities,
+      stars
+    );
 
     const data = await hotelGet();
     console.log(data);
@@ -45,7 +60,7 @@ export default function HotelCard() {
 
   useEffect(() => {
     fetchHotelWithSearchParams();
-  }, []);
+  }, [searchParams]);
 
   return (
     <>
@@ -67,7 +82,7 @@ export default function HotelCard() {
               src={hotel.image}
               width={240}
               height={250}
-              alt="Picture of the hotel"
+              alt={hotel.name}
               style={{ borderRadius: "10px" }}
             />
           </Link>

@@ -2,7 +2,7 @@ export async function userLogin(email: string, password: string) {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
 
-    const response = await fetch(`${apiUrl}/users/login`, {
+    const response = await fetch(`${apiUrl}/api/users/login`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -26,7 +26,7 @@ export async function userLogout() {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
 
-    const response = await fetch(`${apiUrl}/users/logout`, {
+    const response = await fetch(`${apiUrl}/api/users/logout`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -51,7 +51,7 @@ export async function userCreate(
   try {
     const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
 
-    const response = await fetch(`${apiUrl}/users`, {
+    const response = await fetch(`${apiUrl}/api/users`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -77,7 +77,7 @@ export async function refreshToken() {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
 
-    const response = await fetch(`${apiUrl}/users/refresh-token`, {
+    const response = await fetch(`${apiUrl}/api/users/refresh-token`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -97,7 +97,7 @@ export async function currentUser() {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
 
-    const response = await fetch(`${apiUrl}/users/me`, {
+    const response = await fetch(`${apiUrl}/api/users/me`, {
       method: "GET",
       credentials: "include",
       headers: {

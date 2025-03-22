@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { hotelGet } from "@/app/api/hotel";
 
 interface Hotel {
   id: string;
@@ -25,43 +26,21 @@ export default function HotelCard() {
     const untilDate = searchParams.get("untilDate");
     const guests = searchParams.get("guests");
 
-    const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
+    const data = await hotelGet();
+    console.log(data);
 
-    try {
-      const res = await fetch(`${apiUrl}/hotel`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!res.ok) {
-        throw new Error("Failed to fetch hotels");
-      }
-      const data = await res.json();
-      // setHotels(data);
-      console.log(data);
-    } catch (error) {
-      console.error(error);
+    if (data.docs) {
+      setHotels(
+        data.docs.map((hotel: any) => ({
+          id: hotel.id,
+          image: process.env.NEXT_PUBLIC_PAYLOAD_API_URL + hotel.media[0].url,
+          name: hotel.name,
+          address: hotel.address,
+          score: hotel["review score"].score,
+          amenities: hotel.amenities,
+        }))
+      );
     }
-
-    setHotels([
-      {
-        id: "1",
-        image: "/images/photo-res.webp",
-        name: "New World",
-        address: "29 PDL JID KSN",
-        score: 3.5,
-        amenities: ["Wi-Fi", "Chỗ đậu xe", "Nhà hàng"],
-      },
-      {
-        id: "2",
-        image: "/images/photo-res.webp",
-        name: "New World",
-        address: "29 PDL JID KSN",
-        score: 3.5,
-        amenities: ["Wi-Fi", "Chỗ đậu xe", "Nhà hàng"],
-      },
-    ]);
   };
 
   useEffect(() => {
@@ -127,9 +106,15 @@ export default function HotelCard() {
               alignItems="flex-end"
               justifyContent="flex-end"
             >
-              <Button variant="contained" sx={{ mt: 2 }}>
-                Xem chi tiết
-              </Button>
+              <Typography variant="h6">121 VND</Typography>
+              <Typography variant="body2" color="text.secondary">
+                Đã bao gồm VAT
+              </Typography>
+              <Link href={`/hotels/${hotel.id}?${searchParams.toString()}`}>
+                <Button variant="contained" sx={{ mt: 2 }}>
+                  Xem chi tiết
+                </Button>
+              </Link>
             </Box>
           </Box>
         </Box>

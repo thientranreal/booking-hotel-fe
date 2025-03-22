@@ -247,6 +247,7 @@ export default function Navbar() {
                               );
                             } else {
                               toast.success("Đăng xuất thành công");
+                              setIsLogin(false);
                             }
                           }}
                         >

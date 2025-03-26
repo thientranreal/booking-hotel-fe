@@ -6,6 +6,7 @@ import {
   Button,
   Checkbox,
   CircularProgress,
+  Collapse,
   Divider,
   FormControl,
   FormControlLabel,
@@ -25,6 +26,7 @@ export default function Availability() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  const [openFilter, setOpenFilter] = useState(false);
   const [sortBy, setSortBy] = useState("");
   const [amenities, setAmenities] = useState([
     { name: "Hồ bơi", check: false },
@@ -112,104 +114,129 @@ export default function Availability() {
         check: selectedStars.includes(item.name[0]),
       }))
     );
+
+    const sortValue = searchParams.get("sortBy") || "";
+    setSortBy(sortValue);
   }, [searchParams]);
 
   return (
-    <Box display="flex">
-      <Box
-        flex={1}
-        sx={{
-          border: "1px solid rgba(0, 0, 0, 0.5)",
-          borderRadius: "10px",
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-        }}
-        p={2}
-      >
-        <Box>
-          <Typography fontWeight="bold">Lọc theo:</Typography>
-          <Typography>Giá (mỗi đêm):</Typography>
-
-          <Box width={250}>
-            <Slider
-              value={priceRange}
-              onChange={handleChangePriceRange}
-              valueLabelDisplay="auto"
-              min={150000}
-              max={1000000}
-              step={50000}
-            />
-            <Typography variant="body2">
-              Giá từ:{" "}
-              <b>{new Intl.NumberFormat("vi-VN").format(priceRange[0])}</b> đến{" "}
-              <b>{new Intl.NumberFormat("vi-VN").format(priceRange[1])}</b> VNĐ
-            </Typography>
-          </Box>
-        </Box>
-
-        <Divider />
-
-        <Box>
-          <Typography fontWeight="bold">Cơ sở vật chất</Typography>
-          <FormGroup>
-            {amenities.map((element, index) => (
-              <FormControlLabel
-                key={element.name}
-                control={
-                  <Checkbox
-                    checked={element.check}
-                    onChange={(event) => {
-                      let temp = [...amenities];
-                      temp[index].check = event.target.checked;
-                      setAmenities(temp);
-                    }}
-                  />
-                }
-                label={element.name}
-              />
-            ))}
-          </FormGroup>
-        </Box>
-
-        <Divider />
-
-        <Box>
-          <Typography fontWeight="bold">Điểm đánh giá</Typography>
-          <FormGroup>
-            {star.map((element, index) => (
-              <FormControlLabel
-                key={element.name}
-                control={
-                  <Checkbox
-                    checked={element.check}
-                    onChange={(event) => {
-                      let temp = [...star];
-                      temp[index].check = event.target.checked;
-                      setStar(temp);
-                    }}
-                  />
-                }
-                label={element.name}
-              />
-            ))}
-          </FormGroup>
-        </Box>
-
-        <Divider />
-
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: { xs: "column", sm: "column", md: "row" },
+        gap: 2,
+      }}
+    >
+      {/* Button for show hide filter */}
+      <Box sx={{ display: { xs: "block", md: "none" } }}>
         <Button
-          onClick={handleSearch}
           variant="contained"
-          endIcon={<SearchIcon />}
+          onClick={() => setOpenFilter(!openFilter)}
+          sx={{ mb: 2 }}
         >
-          Tìm kiếm
+          {openFilter ? "Ẩn bộ lọc" : "Hiện bộ lọc"}
         </Button>
       </Box>
 
+      {/* Filter block */}
+      <Collapse in={openFilter || window.innerWidth >= 900} timeout="auto">
+        <Box
+          flex={1}
+          sx={{
+            border: "1px solid rgba(0, 0, 0, 0.5)",
+            borderRadius: "10px",
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+          p={2}
+        >
+          <Box>
+            <Typography fontWeight="bold">Lọc theo:</Typography>
+            <Typography>Giá (mỗi đêm):</Typography>
+
+            <Box width={250}>
+              <Slider
+                value={priceRange}
+                onChange={handleChangePriceRange}
+                valueLabelDisplay="auto"
+                min={150000}
+                max={1000000}
+                step={50000}
+              />
+              <Typography variant="body2">
+                Giá từ:{" "}
+                <b>{new Intl.NumberFormat("vi-VN").format(priceRange[0])}</b>{" "}
+                đến{" "}
+                <b>{new Intl.NumberFormat("vi-VN").format(priceRange[1])}</b>{" "}
+                VNĐ
+              </Typography>
+            </Box>
+          </Box>
+
+          <Divider />
+
+          <Box>
+            <Typography fontWeight="bold">Cơ sở vật chất</Typography>
+            <FormGroup>
+              {amenities.map((element, index) => (
+                <FormControlLabel
+                  key={element.name}
+                  control={
+                    <Checkbox
+                      checked={element.check}
+                      onChange={(event) => {
+                        let temp = [...amenities];
+                        temp[index].check = event.target.checked;
+                        setAmenities(temp);
+                      }}
+                    />
+                  }
+                  label={element.name}
+                />
+              ))}
+            </FormGroup>
+          </Box>
+
+          <Divider />
+
+          <Box>
+            <Typography fontWeight="bold">Điểm đánh giá</Typography>
+            <FormGroup>
+              {star.map((element, index) => (
+                <FormControlLabel
+                  key={element.name}
+                  control={
+                    <Checkbox
+                      checked={element.check}
+                      onChange={(event) => {
+                        let temp = [...star];
+                        temp[index].check = event.target.checked;
+                        setStar(temp);
+                      }}
+                    />
+                  }
+                  label={element.name}
+                />
+              ))}
+            </FormGroup>
+          </Box>
+
+          <Divider />
+
+          <Button
+            onClick={handleSearch}
+            variant="contained"
+            endIcon={<SearchIcon />}
+          >
+            Tìm kiếm
+          </Button>
+        </Box>
+      </Collapse>
+
       {/* Right */}
-      <Box flex={3} ml={2}>
-        <Box width="200px" mb={2} marginLeft="auto">
+      <Box flex={3}>
+        <Box mb={2} marginLeft="auto">
           <FormControl fullWidth>
             <InputLabel id="sort-by-select-label">Sắp xếp theo</InputLabel>
             <Select

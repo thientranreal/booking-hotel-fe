@@ -38,6 +38,7 @@ export default function HotelCard() {
     const priceTo = searchParams.get("priceTo");
     const amenities = searchParams.getAll("amenities");
     const stars = searchParams.getAll("star");
+    const sortBy = searchParams.get("sortBy");
     const page = Number(searchParams.get("page"));
 
     console.log(
@@ -85,10 +86,9 @@ export default function HotelCard() {
         <Box
           key={hotel.id}
           sx={{
-            width: 804,
-            height: 274,
             p: 2,
             display: "flex",
+            flexDirection: { xs: "column", sm: "column", md: "row" },
             border: "1px solid rgba(0, 0, 0, 0.5)",
             borderRadius: "10px",
             mb: 3,
@@ -123,7 +123,7 @@ export default function HotelCard() {
               </Typography>
             </Box>
 
-            <Box display="flex" gap={2} mt={2}>
+            <Box display="flex" gap={2} mt={2} flexWrap="wrap">
               {hotel.amenities.map((amenity) => (
                 <Typography key={amenity + hotel.id} variant="body2">
                   {amenity}

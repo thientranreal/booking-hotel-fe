@@ -16,7 +16,7 @@ export default function Overview({
   address: string;
   score: number;
   description: string;
-  images: string[];
+  images: { img: string; alt: string }[];
   amenities: string[];
   setValue: (value: string) => void;
 }) {
@@ -53,25 +53,27 @@ export default function Overview({
       </Box>
 
       <Grid container spacing={2} sx={{ mt: 2 }}>
-        <Grid item xs={12} md={8}>
-          <Image
-            src={images[0]}
-            alt="Hotel Main"
-            width={600}
-            height={300}
-            style={{ borderRadius: 8, width: "100%" }}
-          />
-        </Grid>
+        {images.length > 0 && (
+          <Grid item xs={12} md={8}>
+            <Image
+              src={images[0].img}
+              alt={images[0].alt}
+              width={600}
+              height={300}
+              style={{ borderRadius: 8, width: "100%" }}
+            />
+          </Grid>
+        )}
 
         <Grid item xs={12} md={4}>
           <Grid container spacing={1}>
             {images.map(
               (element, index) =>
                 index !== 0 && (
-                  <Grid item xs={6} key={element}>
+                  <Grid item xs={6} key={element.img}>
                     <Image
-                      src={element}
-                      alt="Hotel"
+                      src={element.img}
+                      alt={element.alt}
                       width={150}
                       height={100}
                       style={{ borderRadius: 8, width: "100%" }}
@@ -91,7 +93,7 @@ export default function Overview({
         Dịch vụ tiện ích
       </Typography>
 
-      <Box display="flex" mt={2} gap={3}>
+      <Box display="flex" mt={2} gap={3} flexWrap="wrap">
         {amenities.map((element) => (
           <Chip key={element} label={element} variant="outlined" />
         ))}

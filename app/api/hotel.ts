@@ -1,8 +1,8 @@
-export async function hotelGet() {
+export async function hotelGet(page = 1) {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
 
-    const response = await fetch(`${apiUrl}/api/hotel`);
+    const response = await fetch(`${apiUrl}/api/hotel?page=${page}`);
 
     const data = await response.json();
     return data;

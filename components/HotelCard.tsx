@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { hotelGet } from "@/app/api/hotel";
+import Pagination from "./Pagination";
 
 interface Hotel {
   id: string;
@@ -20,6 +21,14 @@ export default function HotelCard() {
 
   const [hotels, setHotels] = useState<Hotel[]>([]);
 
+  // State for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [nextPage, setNextPage] = useState(null);
+  const [prevPage, setPrevPage] = useState(null);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [hasPrevPage, setHasPrevPage] = useState(false);
+
   const fetchHotelWithSearchParams = async () => {
     const place = searchParams.get("place");
     const fromDate = searchParams.get("fromDate");
@@ -29,6 +38,7 @@ export default function HotelCard() {
     const priceTo = searchParams.get("priceTo");
     const amenities = searchParams.getAll("amenities");
     const stars = searchParams.getAll("star");
+    const page = Number(searchParams.get("page"));
 
     console.log(
       place,
@@ -41,7 +51,7 @@ export default function HotelCard() {
       stars
     );
 
-    const data = await hotelGet();
+    const data = await hotelGet(page);
     console.log(data);
 
     if (data.docs) {
@@ -55,6 +65,13 @@ export default function HotelCard() {
           amenities: hotel.amenities,
         }))
       );
+
+      setCurrentPage(data.page);
+      setTotalPages(data.totalPages);
+      setNextPage(data.nextPage);
+      setPrevPage(data.prevPage);
+      setHasNextPage(data.hasNextPage);
+      setHasPrevPage(data.hasPrevPage);
     }
   };
 
@@ -134,6 +151,15 @@ export default function HotelCard() {
           </Box>
         </Box>
       ))}
+
+      <Pagination
+        hasNextPage={hasNextPage}
+        hasPrevPage={hasPrevPage}
+        nextPage={nextPage}
+        prevPage={prevPage}
+        page={currentPage}
+        totalPages={totalPages}
+      />
     </>
   );
 }

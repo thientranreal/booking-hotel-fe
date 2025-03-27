@@ -2,20 +2,26 @@ import { Box, Button, Divider, Typography } from "@mui/material";
 import ImageSlider from "./ImageSlider";
 import BedIcon from "@mui/icons-material/Bed";
 import Link from "next/link";
+import { useParams, useSearchParams } from "next/navigation";
 
 export default function RoomCard({
+  id,
   images,
   name,
   type,
   amenities,
   price,
 }: {
+  id: string;
   images: Array<string>;
   name: string;
   type: string;
   amenities: Array<string>;
   price: number;
 }) {
+  const params = useParams<{ hotelID: string }>();
+  const queryParams = useSearchParams();
+
   return (
     <Box
       sx={{
@@ -72,7 +78,13 @@ export default function RoomCard({
 
           <Box>
             <Button variant="contained" color="primary">
-              <Link href="/hotels/book">Đặt phòng</Link>
+              <Link
+                href={`/hotels/book/${
+                  params.hotelID
+                }/${id}?${queryParams.toString()}`}
+              >
+                Đặt phòng
+              </Link>
             </Button>
           </Box>
         </Box>

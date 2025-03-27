@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import RoomCard from "../RoomCard";
+import { useParams } from "next/navigation";
 
 const images = [
   "https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg",
@@ -10,6 +11,9 @@ const images = [
 ];
 
 export default function InfoPrice() {
+  const params = useParams<{ hotelID: string }>();
+  // params.hotelID to get room type
+
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
@@ -18,6 +22,7 @@ export default function InfoPrice() {
 
       <Box display="flex" gap={2} flexWrap="wrap">
         <RoomCard
+          id="123"
           images={images}
           name="Queen Room"
           type="1 queen"

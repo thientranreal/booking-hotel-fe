@@ -119,6 +119,24 @@ export default function Availability() {
     setSortBy(sortValue);
   }, [searchParams]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 900) {
+        setOpenFilter(true);
+      } else {
+        setOpenFilter(false);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <Box
       sx={{
@@ -128,7 +146,7 @@ export default function Availability() {
       }}
     >
       {/* Button for show hide filter */}
-      <Box sx={{ display: { xs: "block", md: "none" } }}>
+      <Box sx={{ display: { md: "none" } }}>
         <Button
           variant="contained"
           onClick={() => setOpenFilter(!openFilter)}
@@ -139,7 +157,7 @@ export default function Availability() {
       </Box>
 
       {/* Filter block */}
-      <Collapse in={openFilter || window.innerWidth >= 900} timeout="auto">
+      <Collapse in={openFilter} timeout="auto">
         <Box
           flex={1}
           sx={{

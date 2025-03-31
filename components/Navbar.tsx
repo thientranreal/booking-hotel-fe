@@ -64,7 +64,7 @@ export default function Navbar() {
 
       console.log("Current user", data);
 
-      if (data.user) {
+      if (data && data.user) {
         setIsLogin(true);
       }
     };

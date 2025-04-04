@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { hotelGet } from "@/app/api/hotel";
+import { hotelGet, hotelGetWithParams } from "@/app/api/hotel";
 import Pagination from "./Pagination";
 
 interface Hotel {
@@ -39,7 +39,7 @@ export default function HotelCard() {
     const amenities = searchParams.getAll("amenities");
     const stars = searchParams.getAll("star");
     const sortBy = searchParams.get("sortBy");
-    const page = Number(searchParams.get("page"));
+    const page = searchParams.get("page");
 
     console.log(
       place,
@@ -52,28 +52,38 @@ export default function HotelCard() {
       stars
     );
 
-    const data = await hotelGet(page);
-    console.log(data);
+    const data = await hotelGetWithParams(
+      {
+        place,
+        fromDate,
+        untilDate,
+        guests,
+      },
+      page
+    );
 
-    if (data.docs) {
-      setHotels(
-        data.docs.map((hotel: any) => ({
-          id: hotel.id,
-          image: process.env.NEXT_PUBLIC_PAYLOAD_API_URL + hotel.media[0].url,
-          name: hotel.name,
-          address: hotel.address,
-          score: hotel["review score"].score,
-          amenities: hotel.amenities,
-        }))
-      );
+    // const data = await hotelGet(page);
+    console.log("hotel data", data);
 
-      setCurrentPage(data.page);
-      setTotalPages(data.totalPages);
-      setNextPage(data.nextPage);
-      setPrevPage(data.prevPage);
-      setHasNextPage(data.hasNextPage);
-      setHasPrevPage(data.hasPrevPage);
-    }
+    // if (data.docs) {
+    //   setHotels(
+    //     data.docs.map((hotel: any) => ({
+    //       id: hotel.id,
+    //       image: process.env.NEXT_PUBLIC_PAYLOAD_API_URL + hotel.media[0].url,
+    //       name: hotel.name,
+    //       address: hotel.address,
+    //       score: hotel["review score"].score,
+    //       amenities: hotel.amenities,
+    //     }))
+    //   );
+
+    //   setCurrentPage(data.page);
+    //   setTotalPages(data.totalPages);
+    //   setNextPage(data.nextPage);
+    //   setPrevPage(data.prevPage);
+    //   setHasNextPage(data.hasNextPage);
+    //   setHasPrevPage(data.hasPrevPage);
+    // }
   };
 
   useEffect(() => {

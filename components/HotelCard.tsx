@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { hotelGet, hotelGetWithParams } from "@/app/api/hotel";
+import { hotelGetWithParams } from "@/app/api/hotel";
 import Pagination from "./Pagination";
 
 interface Hotel {
@@ -14,6 +14,7 @@ interface Hotel {
   address: string;
   score: number;
   amenities: string[];
+  price: number;
 }
 
 export default function HotelCard() {
@@ -62,28 +63,28 @@ export default function HotelCard() {
       page
     );
 
-    // const data = await hotelGet(page);
     console.log("hotel data", data);
 
-    // if (data.docs) {
-    //   setHotels(
-    //     data.docs.map((hotel: any) => ({
-    //       id: hotel.id,
-    //       image: process.env.NEXT_PUBLIC_PAYLOAD_API_URL + hotel.media[0].url,
-    //       name: hotel.name,
-    //       address: hotel.address,
-    //       score: hotel["review score"].score,
-    //       amenities: hotel.amenities,
-    //     }))
-    //   );
+    if (data) {
+      setHotels(
+        data.map((element: any) => ({
+          id: element.hotel.id,
+          image: process.env.NEXT_PUBLIC_PAYLOAD_API_URL + "/NA/b.png",
+          name: element.hotel.name,
+          address: element.hotel.address,
+          score: element.hotel["review score"].score,
+          amenities: element.hotel.amenities,
+          price: element.Price,
+        }))
+      );
 
-    //   setCurrentPage(data.page);
-    //   setTotalPages(data.totalPages);
-    //   setNextPage(data.nextPage);
-    //   setPrevPage(data.prevPage);
-    //   setHasNextPage(data.hasNextPage);
-    //   setHasPrevPage(data.hasPrevPage);
-    // }
+      // setCurrentPage(data.page);
+      // setTotalPages(data.totalPages);
+      // setNextPage(data.nextPage);
+      // setPrevPage(data.prevPage);
+      // setHasNextPage(data.hasNextPage);
+      // setHasPrevPage(data.hasPrevPage);
+    }
   };
 
   useEffect(() => {
@@ -148,7 +149,7 @@ export default function HotelCard() {
               alignItems="flex-end"
               justifyContent="flex-end"
             >
-              <Typography variant="h6">121 VND</Typography>
+              <Typography variant="h6">{hotel.price} VND</Typography>
               <Typography variant="body2" color="text.secondary">
                 Đã bao gồm VAT
               </Typography>

@@ -84,6 +84,7 @@ export default function Signup() {
           label="Email"
           fullWidth
           margin="normal"
+          type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required

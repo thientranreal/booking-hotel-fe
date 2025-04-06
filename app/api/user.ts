@@ -112,3 +112,37 @@ export async function currentUser() {
     return null;
   }
 }
+
+export async function userUpdate(
+  id: string,
+  formData: {
+    name: string;
+    phone: string;
+    email: string;
+    password: string;
+  }
+) {
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
+
+    const response = await fetch(`${apiUrl}/api/users/${id}`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        ...(formData.password && { password: formData.password }),
+      }),
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error get current user:", error);
+    return null;
+  }
+}

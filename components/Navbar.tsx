@@ -14,23 +14,18 @@ import {
   Dialog,
   Divider,
   List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
   Menu,
   MenuItem,
   Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import SearchBar from "./SearchBar";
 import dayjs from "dayjs";
 import { currentUser, userLogout } from "@/app/api/user";
 import { toast } from "react-toastify";
 
-const pages = ["RESERVATIONS"];
 const settings = [
   { name: "Tài khoản", page: "account" },
   { name: "Lịch sử đặt", page: "book-history" },
@@ -39,6 +34,7 @@ const settings = [
 
 export default function Navbar() {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
@@ -121,7 +117,17 @@ export default function Navbar() {
             component={Link}
             href="/"
           >
-            <Image src="/images/logo.png" alt="Logo" width={200} height={200} />
+            <Typography
+              variant="h4"
+              fontWeight="bold"
+              color="primary"
+              sx={{
+                fontFamily: "'Poppins', sans-serif",
+                letterSpacing: 1.5,
+              }}
+            >
+              Tripping
+            </Typography>
           </Box>
 
           {/* Search box */}
@@ -203,19 +209,6 @@ export default function Navbar() {
           {/* End Search box */}
 
           <Box display="flex" alignItems="center">
-            <Box sx={{ display: { xs: "none", md: "flex" }, mr: 2 }}>
-              {pages.map((text) => (
-                <Button
-                  key={text}
-                  sx={{ my: 2, color: "black", display: "block" }}
-                  component={Link}
-                  href={`/${text.toLowerCase()}`}
-                >
-                  {text}
-                </Button>
-              ))}
-            </Box>
-
             {isLogin ? (
               <>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -248,6 +241,7 @@ export default function Navbar() {
                             } else {
                               toast.success("Đăng xuất thành công");
                               setIsLogin(false);
+                              router.push("/");
                             }
                           }}
                         >
@@ -291,13 +285,6 @@ function SideNav({ isLogin }: { isLogin: boolean }) {
   return (
     <List>
       <Divider sx={{ mt: "5rem" }} />
-      {pages.map((text) => (
-        <ListItem key={text} disablePadding>
-          <ListItemButton component={Link} href={`/${text.toLowerCase()}`}>
-            <ListItemText primary={text} />
-          </ListItemButton>
-        </ListItem>
-      ))}
 
       {!isLogin && (
         <Box display="flex" flexDirection="column" gap={2} p={2}>

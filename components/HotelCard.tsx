@@ -42,17 +42,6 @@ export default function HotelCard() {
     const sortBy = searchParams.get("sortBy");
     const page = searchParams.get("page");
 
-    console.log(
-      place,
-      fromDate,
-      untilDate,
-      guests,
-      priceFrom,
-      priceTo,
-      amenities,
-      stars
-    );
-
     const data = await hotelGetWithParams(
       {
         place,
@@ -63,27 +52,27 @@ export default function HotelCard() {
       page
     );
 
-    console.log("hotel data", data);
-
-    if (data) {
+    if (data && data.docs) {
       setHotels(
-        data.map((element: any) => ({
+        data.docs.map((element: any) => ({
           id: element.hotel.id,
-          image: process.env.NEXT_PUBLIC_PAYLOAD_API_URL + "/NA/b.png",
+          image:
+            process.env.NEXT_PUBLIC_PAYLOAD_API_URL +
+            element.hotel.image[0].image.url,
           name: element.hotel.name,
           address: element.hotel.address,
-          score: element.hotel["review score"].score,
+          score: element.hotel.reviews.rate,
           amenities: element.hotel.amenities,
           price: element.Price,
         }))
       );
 
-      // setCurrentPage(data.page);
-      // setTotalPages(data.totalPages);
+      setCurrentPage(data.page);
+      setTotalPages(data.totalPages);
       // setNextPage(data.nextPage);
       // setPrevPage(data.prevPage);
-      // setHasNextPage(data.hasNextPage);
-      // setHasPrevPage(data.hasPrevPage);
+      setHasNextPage(data.hasNextPage);
+      setHasPrevPage(data.hasPrevPage);
     }
   };
 

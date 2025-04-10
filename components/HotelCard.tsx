@@ -30,53 +30,53 @@ export default function HotelCard() {
   const [hasNextPage, setHasNextPage] = useState(false);
   const [hasPrevPage, setHasPrevPage] = useState(false);
 
-  const fetchHotelWithSearchParams = async () => {
-    const place = searchParams.get("place");
-    const fromDate = searchParams.get("fromDate");
-    const untilDate = searchParams.get("untilDate");
-    const guests = searchParams.get("guests");
-    const priceFrom = searchParams.get("priceFrom");
-    const priceTo = searchParams.get("priceTo");
-    const amenities = searchParams.getAll("amenities");
-    const stars = searchParams.getAll("star");
-    const sortBy = searchParams.get("sortBy");
-    const page = searchParams.get("page");
+  useEffect(() => {
+    const fetchHotelWithSearchParams = async () => {
+      const place = searchParams.get("place");
+      const fromDate = searchParams.get("fromDate");
+      const untilDate = searchParams.get("untilDate");
+      const guests = searchParams.get("guests");
+      const priceFrom = searchParams.get("priceFrom");
+      const priceTo = searchParams.get("priceTo");
+      const amenities = searchParams.getAll("amenities");
+      const stars = searchParams.getAll("star");
+      const sortBy = searchParams.get("sortBy");
+      const page = searchParams.get("page");
 
-    const data = await hotelGetWithParams(
-      {
-        place,
-        fromDate,
-        untilDate,
-        guests,
-      },
-      page
-    );
-
-    if (data && data.docs) {
-      setHotels(
-        data.docs.map((element: any) => ({
-          id: element.hotel.id,
-          image:
-            process.env.NEXT_PUBLIC_PAYLOAD_API_URL +
-            element.hotel.image[0].image.url,
-          name: element.hotel.name,
-          address: element.hotel.address,
-          score: element.hotel.reviews.rate,
-          amenities: element.hotel.amenities,
-          price: element.Price,
-        }))
+      const data = await hotelGetWithParams(
+        {
+          place,
+          fromDate,
+          untilDate,
+          guests,
+        },
+        page
       );
 
-      setCurrentPage(data.page);
-      setTotalPages(data.totalPages);
-      // setNextPage(data.nextPage);
-      // setPrevPage(data.prevPage);
-      setHasNextPage(data.hasNextPage);
-      setHasPrevPage(data.hasPrevPage);
-    }
-  };
+      if (data && data.docs) {
+        setHotels(
+          data.docs.map((element: any) => ({
+            id: element.hotel.id,
+            image:
+              process.env.NEXT_PUBLIC_PAYLOAD_API_URL +
+              element.hotel.image[0].image.url,
+            name: element.hotel.name,
+            address: element.hotel.address,
+            score: element.hotel.reviews.rate,
+            amenities: element.hotel.amenities,
+            price: element.Price,
+          }))
+        );
 
-  useEffect(() => {
+        setCurrentPage(data.page);
+        setTotalPages(data.totalPages);
+        // setNextPage(data.nextPage);
+        // setPrevPage(data.prevPage);
+        setHasNextPage(data.hasNextPage);
+        setHasPrevPage(data.hasPrevPage);
+      }
+    };
+
     fetchHotelWithSearchParams();
   }, [searchParams]);
 

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { hotelFindById } from "@/app/api/hotel";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 interface Image {
   id: string;
@@ -39,8 +40,6 @@ export default function Overview({
   useEffect(() => {
     const getHotelById = async () => {
       const data = await hotelFindById(params.hotelID);
-
-      console.log(data);
 
       if (data.errors) {
         toast.error(data.errors[0].message);
@@ -108,13 +107,15 @@ export default function Overview({
       <Grid container spacing={2} sx={{ mt: 2 }}>
         {images.length > 0 && (
           <Grid item xs={12} md={8}>
-            <Image
-              src={images[0].img}
-              alt={images[0].alt}
-              width={600}
-              height={300}
-              style={{ borderRadius: 8, width: "100%" }}
-            />
+            <Link href={images[0].img}>
+              <Image
+                src={images[0].img}
+                alt={images[0].alt}
+                width={600}
+                height={300}
+                style={{ borderRadius: 8, width: "100%" }}
+              />
+            </Link>
           </Grid>
         )}
 
@@ -124,13 +125,15 @@ export default function Overview({
               (element, index) =>
                 index !== 0 && (
                   <Grid item xs={6} key={element.id}>
-                    <Image
-                      src={element.img}
-                      alt={element.alt}
-                      width={150}
-                      height={100}
-                      style={{ borderRadius: 8, width: "100%" }}
-                    />
+                    <Link href={element.img}>
+                      <Image
+                        src={element.img}
+                        alt={element.alt}
+                        width={150}
+                        height={100}
+                        style={{ borderRadius: 8, width: "100%" }}
+                      />
+                    </Link>
                   </Grid>
                 )
             )}

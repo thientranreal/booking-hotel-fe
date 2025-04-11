@@ -58,8 +58,6 @@ export default function Navbar() {
     const checkLogin = async () => {
       const data = await currentUser();
 
-      console.log("Current user", data);
-
       if (data && data.user) {
         setIsLogin(true);
       }
@@ -233,7 +231,7 @@ export default function Navbar() {
                             handleCloseUserMenu();
 
                             const data = await userLogout();
-                            console.log(data);
+
                             if (data.errors) {
                               toast.error(
                                 "Đăng xuất thất bại " + data.errors[0].message

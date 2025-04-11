@@ -126,7 +126,7 @@ export default function Navbar() {
                 letterSpacing: 1.5,
               }}
             >
-              Tripping
+              Trips
             </Typography>
           </Box>
 

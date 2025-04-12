@@ -103,13 +103,18 @@ export default function Review() {
 
   return (
     <Box>
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h6" fontWeight="600" gutterBottom>
         Đánh giá khách hàng
       </Typography>
 
-      <RatingReadOnly value={2.5} size="medium" />
+      <Box display="flex" alignItems="center" gap={1}>
+        <RatingReadOnly value={2.5} size="medium" />
+        <Typography variant="body2" color="text.secondary">
+          2.5/5 (dựa trên 100 đánh giá)
+        </Typography>
+      </Box>
 
-      <Typography variant="h6" gutterBottom mt={3}>
+      <Typography variant="h6" fontWeight="600" gutterBottom mt={3}>
         Đánh giá gần đây
       </Typography>
 
@@ -152,7 +157,17 @@ export default function Review() {
 
       {/* Review section */}
       <Box sx={{ maxWidth: "800px", margin: "auto", padding: 3 }}>
-        <Typography variant="h4" align="center" gutterBottom>
+        <Typography
+          variant="h4"
+          align="center"
+          fontWeight={600}
+          sx={{
+            textTransform: "uppercase",
+            letterSpacing: 1.2,
+            color: "text.primary",
+          }}
+          gutterBottom
+        >
           Đánh giá của bạn
         </Typography>
 
@@ -165,8 +180,6 @@ export default function Review() {
 
         {/* Review Submission Form */}
         <Box component="form" onSubmit={handleSubmit}>
-          <Typography variant="h6">Viết đánh giá</Typography>
-
           <Rating
             value={rating}
             onChange={(_, newValue) => setRating(newValue)}
@@ -192,7 +205,25 @@ export default function Review() {
             onChange={(e) => setContent(e.target.value)}
             required
           />
-          <Button variant="contained" type="submit" fullWidth sx={{ mt: 2 }}>
+          <Button
+            variant="contained"
+            type="submit"
+            fullWidth
+            sx={{
+              mt: 2,
+              borderRadius: 2,
+              textTransform: "none",
+              fontWeight: 600,
+              px: 4,
+              py: 1.5,
+              boxShadow: 3,
+              ":hover": {
+                boxShadow: 4,
+                backgroundColor: "#c9302c",
+              },
+              transition: "background-color 0.3s, box-shadow 0.3s", // smooth hover effect
+            }}
+          >
             Đăng review của bạn
           </Button>
         </Box>

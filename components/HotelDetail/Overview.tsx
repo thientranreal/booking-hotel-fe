@@ -1,4 +1,11 @@
-import { Box, Button, Grid, Typography, Chip } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Typography,
+  Chip,
+  CircularProgress,
+} from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Image from "next/image";
 import RatingReadOnly from "../RatingReadOnly";
@@ -37,135 +44,187 @@ export default function Overview({
   const [amenities, setAmenities] = useState([]);
   const [policies, setPolicies] = useState<Policy[]>([]);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    const getHotelById = async () => {
-      const data = await hotelFindById(params.hotelID);
+    if (isLoading) {
+      const getHotelById = async () => {
+        const data = await hotelFindById(params.hotelID);
 
-      if (data.errors) {
-        toast.error(data.errors[0].message);
-      } else {
-        setName(data.name);
-        setAddress(data.address);
-        setReview(data.reviews);
-        setDescription(data.description);
-        setImages(
-          data.image.map((img: any) => ({
-            id: img.id,
-            img: process.env.NEXT_PUBLIC_PAYLOAD_API_URL + img.image.url,
-            alt: img.image.alt,
-          }))
-        );
-        setAmenities(data.amenities);
-        setPolicies(data.policy);
-      }
-    };
+        if (data.errors) {
+          toast.error(data.errors[0].message);
+        } else {
+          setName(data.name);
+          setAddress(data.address);
+          setReview(data.reviews);
+          setDescription(data.description);
+          setImages(
+            data.image.map((img: any) => ({
+              id: img.id,
+              img: process.env.NEXT_PUBLIC_PAYLOAD_API_URL + img.image.url,
+              alt: img.image.alt,
+            }))
+          );
+          setAmenities(data.amenities);
+          setPolicies(data.policy);
+        }
 
-    getHotelById();
-  }, []);
+        setIsLoading(false);
+      };
+
+      getHotelById();
+    }
+  }, [isLoading]);
 
   return (
-    <Box>
-      <Box display="flex" alignItems="center" justifyContent="space-between">
+    <>
+      {isLoading ? (
+        <Box display="flex" justifyContent="center">
+          <CircularProgress />
+        </Box>
+      ) : (
         <Box>
-          <Typography variant="h5" fontWeight="bold">
-            {name}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ display: "flex", alignItems: "center", mt: 1 }}
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
           >
-            <LocationOnIcon fontSize="small" sx={{ mr: 0.5 }} />
-            {address}
+            <Box>
+              <Typography variant="h5" fontWeight={700} gutterBottom>
+                {name}
+              </Typography>
+
+              <Box
+                display="flex"
+                alignItems="center"
+                color="text.secondary"
+                mt={1}
+              >
+                <LocationOnIcon fontSize="small" sx={{ mr: 0.5 }} />
+                <Typography variant="body2" color="text.secondary">
+                  {address}
+                </Typography>
+              </Box>
+
+              <Box mt={2} display="flex" alignItems="center" gap={1}>
+                <RatingReadOnly
+                  value={review.rate}
+                  size="medium"
+                  showLabel={false}
+                />
+
+                <Typography variant="body2" color="text.secondary">
+                  ({review.review_count})
+                </Typography>
+              </Box>
+            </Box>
+
+            <Box>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={() => setValue("2")}
+                sx={{
+                  mt: 2,
+                  borderRadius: 2,
+                  textTransform: "none",
+                  fontWeight: 600,
+                  px: 4,
+                  py: 1.5,
+                  boxShadow: 3,
+                  ":hover": {
+                    boxShadow: 4,
+                    backgroundColor: "#c9302c",
+                  },
+                }}
+              >
+                Đặt phòng
+              </Button>
+            </Box>
+          </Box>
+
+          <Grid container spacing={2} sx={{ mt: 2 }}>
+            {images.length > 0 && (
+              <Grid item xs={12} md={8}>
+                <Link href={images[0].img}>
+                  <Image
+                    src={images[0].img}
+                    alt={images[0].alt}
+                    width={600}
+                    height={300}
+                    style={{ borderRadius: 8, width: "100%" }}
+                  />
+                </Link>
+              </Grid>
+            )}
+
+            <Grid item xs={12} md={4}>
+              <Grid container spacing={1}>
+                {images.map(
+                  (element, index) =>
+                    index !== 0 && (
+                      <Grid item xs={6} key={element.id}>
+                        <Link href={element.img}>
+                          <Image
+                            src={element.img}
+                            alt={element.alt}
+                            width={150}
+                            height={100}
+                            style={{ borderRadius: 8, width: "100%" }}
+                          />
+                        </Link>
+                      </Grid>
+                    )
+                )}
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Typography
+            variant="body1"
+            sx={{
+              mt: 3,
+              lineHeight: 1.75,
+              color: "text.secondary",
+              textAlign: "justify",
+            }}
+          >
+            {description}
           </Typography>
 
-          <Box sx={{ mt: 2, display: "flex", alignItems: "center" }}>
-            <RatingReadOnly
-              value={review.rate}
-              size="medium"
-              showLabel={false}
-            />
+          <Typography variant="h6" fontWeight="600" mt={4}>
+            Dịch vụ tiện ích
+          </Typography>
 
-            <Typography
-              color="text.secondary"
-              ml={1}
-            >{`(${review.review_count})`}</Typography>
+          <Box display="flex" flexWrap="wrap" gap={1.5} mt={2}>
+            {amenities.map((element) => (
+              <Chip
+                key={element}
+                label={element}
+                sx={{ fontSize: "0.875rem", fontWeight: 500 }}
+              />
+            ))}
+          </Box>
+
+          <Typography variant="h6" fontWeight="600" mt={4}>
+            Chính sách
+          </Typography>
+
+          <Box mt={2} display="flex" flexDirection="column" gap={2}>
+            {policies.map((element) => (
+              <Box key={element.id}>
+                <Typography fontWeight="500">
+                  {element["policy name"]}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {element.description}
+                </Typography>
+              </Box>
+            ))}
           </Box>
         </Box>
-
-        <Box>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setValue("2")}
-          >
-            Đặt phòng
-          </Button>
-        </Box>
-      </Box>
-
-      <Grid container spacing={2} sx={{ mt: 2 }}>
-        {images.length > 0 && (
-          <Grid item xs={12} md={8}>
-            <Link href={images[0].img}>
-              <Image
-                src={images[0].img}
-                alt={images[0].alt}
-                width={600}
-                height={300}
-                style={{ borderRadius: 8, width: "100%" }}
-              />
-            </Link>
-          </Grid>
-        )}
-
-        <Grid item xs={12} md={4}>
-          <Grid container spacing={1}>
-            {images.map(
-              (element, index) =>
-                index !== 0 && (
-                  <Grid item xs={6} key={element.id}>
-                    <Link href={element.img}>
-                      <Image
-                        src={element.img}
-                        alt={element.alt}
-                        width={150}
-                        height={100}
-                        style={{ borderRadius: 8, width: "100%" }}
-                      />
-                    </Link>
-                  </Grid>
-                )
-            )}
-          </Grid>
-        </Grid>
-      </Grid>
-
-      <Typography variant="body1" sx={{ mt: 2 }}>
-        {description}
-      </Typography>
-
-      <Typography variant="h6" sx={{ mt: 2 }}>
-        Dịch vụ tiện ích
-      </Typography>
-
-      <Box display="flex" mt={2} gap={3} flexWrap="wrap">
-        {amenities.map((element) => (
-          <Chip key={element} label={element} variant="outlined" />
-        ))}
-      </Box>
-
-      <Typography variant="h6" sx={{ mt: 2 }}>
-        Chính sách
-      </Typography>
-
-      <Box mt={2} gap={3}>
-        {policies.map((element) => (
-          <Typography key={element.id} sx={{ mt: 2 }}>
-            {`${element["policy name"]} ${element.description}`}
-          </Typography>
-        ))}
-      </Box>
-    </Box>
+      )}
+    </>
   );
 }

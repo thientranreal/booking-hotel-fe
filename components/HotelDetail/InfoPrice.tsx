@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import RoomCard from "../RoomCard";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,6 +10,7 @@ interface roomType {
   amenities: [];
   name: string;
   price: number;
+  numberOfGuests: number;
   images: [];
 }
 
@@ -19,60 +20,78 @@ export default function InfoPrice() {
 
   const [roomTypes, setRoomTypes] = useState<roomType[]>([]);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    const fetchRoomType = async () => {
-      const place = searchParams.get("place");
-      const fromDate = searchParams.get("fromDate");
-      const untilDate = searchParams.get("untilDate");
-      const guests = searchParams.get("guests");
-      const hotelId = params.hotelID;
+    if (isLoading) {
+      const fetchRoomType = async () => {
+        const place = searchParams.get("place");
+        const fromDate = searchParams.get("fromDate");
+        const untilDate = searchParams.get("untilDate");
+        const guests = searchParams.get("guests");
+        const hotelId = params.hotelID;
 
-      const data = await roomTypeGetWithHotelIdAndParams(hotelId, {
-        place,
-        fromDate,
-        untilDate,
-        guests,
-      });
+        const data = await roomTypeGetWithHotelIdAndParams(hotelId, {
+          place,
+          fromDate,
+          untilDate,
+          guests,
+        });
 
-      if (data) {
-        setRoomTypes(
-          data.map((room: any) => ({
-            id: room.id,
-            bedType: room.bedType,
-            amenities: room.amenities,
-            name: room.name,
-            price: room.price,
-            images: room.image.map(
-              (img: any) =>
-                process.env.NEXT_PUBLIC_PAYLOAD_API_URL + img.image.url
-            ),
-          }))
-        );
-      }
-    };
+        console.log(data);
 
-    fetchRoomType();
-  }, []);
+        if (data) {
+          setRoomTypes(
+            data.map((room: any) => ({
+              id: room.id,
+              bedType: room.bedType,
+              amenities: room.amenities,
+              name: room.name,
+              price: room.price,
+              numberOfGuests: room.numberOfGuests,
+              images: room.image.map(
+                (img: any) =>
+                  process.env.NEXT_PUBLIC_PAYLOAD_API_URL + img.image.url
+              ),
+            }))
+          );
+        }
+
+        setIsLoading(false);
+      };
+
+      fetchRoomType();
+    }
+  }, [isLoading]);
 
   return (
-    <Box>
-      <Typography variant="h6" gutterBottom>
-        Chọn phòng của bạn
-      </Typography>
+    <>
+      {isLoading ? (
+        <Box display="flex" justifyContent="center">
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Box>
+          <Typography variant="h6" gutterBottom>
+            Chọn phòng của bạn
+          </Typography>
 
-      <Box display="flex" gap={2} flexWrap="wrap">
-        {roomTypes.map((element) => (
-          <RoomCard
-            key={element.id}
-            id={element.id}
-            images={element.images}
-            name={element.name}
-            type={element.bedType}
-            amenities={element.amenities}
-            price={element.price}
-          />
-        ))}
-      </Box>
-    </Box>
+          <Box display="flex" gap={2} flexWrap="wrap">
+            {roomTypes.map((element) => (
+              <RoomCard
+                key={element.id}
+                id={element.id}
+                images={element.images}
+                name={element.name}
+                type={element.bedType}
+                amenities={element.amenities}
+                numberOfGuests={element.numberOfGuests}
+                price={element.price}
+              />
+            ))}
+          </Box>
+        </Box>
+      )}
+    </>
   );
 }

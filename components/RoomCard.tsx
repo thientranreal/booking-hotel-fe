@@ -1,6 +1,7 @@
-import { Box, Button, Divider, Typography } from "@mui/material";
+import { Box, Button, Chip, Divider, Typography } from "@mui/material";
 import ImageSlider from "./ImageSlider";
 import BedIcon from "@mui/icons-material/Bed";
+import PeopleIcon from "@mui/icons-material/People";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
 
@@ -10,6 +11,7 @@ export default function RoomCard({
   name,
   type,
   amenities,
+  numberOfGuests,
   price,
 }: {
   id: string;
@@ -17,6 +19,7 @@ export default function RoomCard({
   name: string;
   type: string;
   amenities: Array<string>;
+  numberOfGuests: number;
   price: number;
 }) {
   const params = useParams<{ hotelID: string }>();
@@ -50,18 +53,31 @@ export default function RoomCard({
 
       <Box p={2}>
         <Box display="flex" flexDirection="column" gap={2}>
-          <Typography fontWeight="500" fontSize="large">
+          {/* Room name */}
+          <Typography fontWeight="600" fontSize="1.25rem">
             {name}
           </Typography>
 
-          <Box display="flex" alignItems="center">
-            <BedIcon fontSize="medium" />
-            <Typography>{type}</Typography>
+          {/* Type and guest info */}
+          <Box display="flex" alignItems="center" gap={2}>
+            <Box display="flex" alignItems="center" gap={0.5}>
+              <BedIcon fontSize="small" />
+              <Typography variant="body2" color="text.secondary">
+                {type}
+              </Typography>
+            </Box>
+            <Box display="flex" alignItems="center" gap={0.5}>
+              <PeopleIcon fontSize="small" />
+              <Typography variant="body2" color="text.secondary">
+                {numberOfGuests} guest{numberOfGuests > 1 ? "s" : ""}
+              </Typography>
+            </Box>
           </Box>
 
-          <Box display="flex" gap={1}>
+          {/* Amenities */}
+          <Box display="flex" flexWrap="wrap" gap={1}>
             {amenities.map((element) => (
-              <Typography key={element}>{element}</Typography>
+              <Chip key={element} label={element} size="small" />
             ))}
           </Box>
         </Box>
@@ -70,21 +86,40 @@ export default function RoomCard({
 
         <Box display="flex" justifyContent="space-between">
           <Box>
-            <Typography fontWeight="500" fontSize="large">
-              {price} VND
+            <Typography
+              fontWeight={600}
+              fontSize="1.125rem"
+              color="text.primary"
+            >
+              {price.toLocaleString()} VND
             </Typography>
-            <Typography>đã bao gồm thuế</Typography>
+            <Typography variant="body2" color="text.secondary">
+              Đã bao gồm thuế
+            </Typography>
           </Box>
 
           <Box>
-            <Button variant="contained" color="primary">
-              <Link
-                href={`/hotels/book/${
-                  params.hotelID
-                }/${id}?${queryParams.toString()}`}
-              >
-                Đặt phòng
-              </Link>
+            <Button
+              variant="contained"
+              color="primary"
+              LinkComponent={Link}
+              href={`/hotels/book/${
+                params.hotelID
+              }/${id}?${queryParams.toString()}`}
+              sx={{
+                borderRadius: 2,
+                textTransform: "none",
+                fontWeight: 600,
+                px: 4,
+                py: 1.5,
+                boxShadow: 3,
+                ":hover": {
+                  boxShadow: 4,
+                  backgroundColor: "#c9302c",
+                },
+              }}
+            >
+              Đặt phòng
             </Button>
           </Box>
         </Box>

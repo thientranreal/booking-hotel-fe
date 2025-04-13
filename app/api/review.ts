@@ -3,7 +3,9 @@ export async function reviewGetWithHotelId(hotelId: string, page: number) {
     const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
 
     const response = await fetch(
-      `${apiUrl}/api/reviews?where[hotel.id][equals]=${hotelId}&depth=0&page=${page}`
+      `${apiUrl}/api/reviews?` +
+        `where[hotel.id][equals]=${hotelId}&depth=0` +
+        `&sort=-createdAt,id&page=${page}`
     );
 
     const data = await response.json();

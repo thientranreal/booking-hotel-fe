@@ -38,8 +38,6 @@ export default function InfoPrice() {
           guests,
         });
 
-        console.log(data);
-
         if (data) {
           setRoomTypes(
             data.map((room: any) => ({

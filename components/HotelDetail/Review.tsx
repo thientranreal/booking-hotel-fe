@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import RatingReadOnly from "../RatingReadOnly";
 import ReviewsCarousel from "./ReviewsCarousel";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { reviewGetWithHotelId, reviewPost } from "@/app/api/review";
 import { hotelFindById } from "@/app/api/hotel";
@@ -42,7 +42,23 @@ export default function Review() {
   const [content, setContent] = useState("");
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingReview, setIsLoadingReview] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const boxRef = useRef<HTMLDivElement>(null);
+
+  // Handle scroll to the bottom
+  const handleScroll = () => {
+    const element = boxRef.current;
+    if (!element) return;
+
+    const isBottom =
+      element.scrollHeight - element.scrollTop === element.clientHeight;
+
+    if (isBottom) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -88,7 +104,13 @@ export default function Review() {
 
   // Get more reviews if current page changes
   useEffect(() => {
-    if (currentPage > 1) {
+    if (!isLoadingReview && currentPage > 1) {
+      setIsLoadingReview(true);
+    }
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (isLoadingReview) {
       const fetchReviewWithHotelIdNextPage = async () => {
         const data = await reviewGetWithHotelId(params.hotelID, currentPage);
 
@@ -104,11 +126,13 @@ export default function Review() {
             })),
           ]);
         }
+
+        setIsLoadingReview(false);
       };
 
       fetchReviewWithHotelIdNextPage();
     }
-  }, [currentPage]);
+  }, [isLoadingReview]);
 
   // Get review first page
   useEffect(() => {
@@ -152,7 +176,9 @@ export default function Review() {
       </Typography>
 
       {isLoading ? (
-        <CircularProgress />
+        <Box display="flex" justifyContent="center">
+          <CircularProgress />
+        </Box>
       ) : (
         <>
           <Box display="flex" alignItems="center" gap={1}>
@@ -170,7 +196,6 @@ export default function Review() {
           <ReviewsCarousel
             reviews={reviews}
             setOpenReview={setOpenReview}
-            currentPage={currentPage}
             setCurrentPage={setCurrentPage}
           />
 
@@ -189,7 +214,11 @@ export default function Review() {
               <Divider />
               <RatingReadOnly size="large" value={overallRating.rate} />
               <Divider />
-              <Box sx={{ overflowY: "scroll" }}>
+              <Box
+                ref={boxRef}
+                sx={{ overflowY: "scroll" }}
+                onScroll={handleScroll}
+              >
                 <Typography variant="h6">Đánh giá gần đây</Typography>
 
                 {reviews.map((element) => (
@@ -208,6 +237,12 @@ export default function Review() {
                     <Divider sx={{ mt: 3 }} />
                   </Box>
                 ))}
+
+                {isLoadingReview && (
+                  <Box display="flex" justifyContent="center">
+                    <CircularProgress />
+                  </Box>
+                )}
               </Box>
             </Box>
           </Dialog>

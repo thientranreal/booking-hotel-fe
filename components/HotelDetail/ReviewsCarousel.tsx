@@ -10,9 +10,13 @@ import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 export default function ReviewsCarousel({
   reviews,
   setOpenReview,
+  currentPage,
+  setCurrentPage,
 }: {
   reviews: Array<{ title: string; content: string }>;
   setOpenReview: (value: boolean) => void;
+  currentPage: number;
+  setCurrentPage: (value: number) => void;
 }) {
   return (
     /* Swiper Container */
@@ -27,6 +31,9 @@ export default function ReviewsCarousel({
         900: { slidesPerView: 3 },
       }}
       modules={[Navigation]}
+      onReachEnd={() => {
+        setCurrentPage(currentPage + 1);
+      }}
     >
       {reviews.map((review, index) => (
         <SwiperSlide key={index}>

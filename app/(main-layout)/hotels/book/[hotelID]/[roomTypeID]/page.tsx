@@ -1,5 +1,7 @@
 "use client";
 
+import { hotelFindById } from "@/app/api/hotel";
+import { roomTypeFindById } from "@/app/api/roomType";
 import { currentUser } from "@/app/api/user";
 import RatingReadOnly from "@/components/RatingReadOnly";
 import diffDate from "@/utils/diffDate";
@@ -12,12 +14,25 @@ import {
   Button,
 } from "@mui/material";
 import Image from "next/image";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function BookingSummary() {
   const params = useParams<{ hotelID: string; roomTypeID: string }>();
   const queryParams = useSearchParams();
+  const router = useRouter();
+
+  const [hotelInfo, setHotelInfo] = useState({
+    rate: 0,
+    name: "",
+    address: "",
+    img: "",
+  });
+
+  const [roomInfo, setRoomInfo] = useState({
+    name: "Hello negga",
+    price: 300000,
+  });
 
   const [form, setForm] = useState({
     name: "",
@@ -30,19 +45,40 @@ export default function BookingSummary() {
   };
 
   useEffect(() => {
-    const getCurrentUser = async () => {
+    const getConfirmData = async () => {
       const data = await currentUser();
 
-      if (data.user) {
+      if (data && data.user) {
         setForm({
           name: data.user.name,
           email: data.user.email,
           phone: data.user.phone || "",
         });
+      } else {
+        router.push("/login");
+      }
+
+      const roomTypeData = await roomTypeFindById(params.roomTypeID);
+
+      if (roomTypeData) {
+        console.log(roomTypeData);
+      }
+
+      const hotelData = await hotelFindById(params.hotelID);
+
+      if (hotelData) {
+        setHotelInfo({
+          rate: hotelData.reviews.rate,
+          name: hotelData.name,
+          address: hotelData.address,
+          img:
+            process.env.NEXT_PUBLIC_PAYLOAD_API_URL +
+            hotelData.image[0].image.url,
+        });
       }
     };
 
-    getCurrentUser();
+    getConfirmData();
   }, []);
 
   return (
@@ -53,14 +89,11 @@ export default function BookingSummary() {
     >
       <Box mr={2} flex={2}>
         <Typography variant="h5" gutterBottom>
-          Your trip
-        </Typography>
-        <Typography color="green">
-          ✔ Great pick! Previous guests rated this property a 10 on average
+          Trip của bạn
         </Typography>
 
         <Typography variant="subtitle1" mt={2}>
-          <strong>Dates</strong>
+          <strong>Ngày</strong>
         </Typography>
         <Typography>
           {queryParams.get("fromDate")} – {queryParams.get("untilDate")} (
@@ -69,11 +102,10 @@ export default function BookingSummary() {
         </Typography>
 
         <Typography variant="subtitle1" mt={2}>
-          <strong>Room</strong>
+          <strong>Phòng</strong>
         </Typography>
         <Typography>
-          1 × Lorem ipsum dolor sit amet consectetur, adipisicing elit. (
-          {queryParams.get("guests")} khách)
+          1 × {roomInfo.name} ({queryParams.get("guests")} khách)
         </Typography>
 
         <Typography variant="h6" mt={4}>
@@ -127,38 +159,48 @@ export default function BookingSummary() {
         >
           <Box display="flex" justifyContent="space-between">
             <Box>
-              <Image
-                src="https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg"
-                width={150}
-                height={150}
-                alt="Picture of the author"
-                style={{ borderRadius: "10px" }}
-              />
+              {hotelInfo.img && (
+                <Image
+                  src={hotelInfo.img}
+                  width={150}
+                  height={150}
+                  alt="Picture of the author"
+                  style={{ borderRadius: "10px" }}
+                />
+              )}
             </Box>
             <Box flex={1} pl={2}>
-              <RatingReadOnly value={4} showLabel={false} size="small" />
-              <Typography variant="h6">
-                Holiday Inn & Suites Saigon Airport by IHG
-              </Typography>
-              <Typography>
-                18E Cong Hoa Street, Tan Binh, Ho Chi Minh City, VN
-              </Typography>
+              <RatingReadOnly
+                value={hotelInfo.rate}
+                showLabel={false}
+                size="small"
+              />
+              <Typography variant="h6">{hotelInfo.name}</Typography>
+              <Typography>{hotelInfo.address}</Typography>
             </Box>
           </Box>
 
           <Divider />
 
           <Box>
-            <Typography variant="h6">Price breakdown</Typography>
-            <Typography>Original price (1 night): $163.57</Typography>
-            <Typography>Taxes and fees: $18.96</Typography>
+            <Typography variant="h6">Chi tiết giá phòng</Typography>
+            <Typography>
+              Giá (1 đêm): {roomInfo.price.toLocaleString()} VND
+            </Typography>
           </Box>
 
           <Divider />
 
           <Box>
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-              Total: $182.52
+              Total:{" "}
+              {(
+                diffDate(
+                  queryParams.get("fromDate"),
+                  queryParams.get("untilDate")
+                ) * roomInfo.price
+              ).toLocaleString()}{" "}
+              VND
             </Typography>
           </Box>
         </Box>

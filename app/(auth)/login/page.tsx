@@ -19,9 +19,7 @@ export default function Login() {
     const checkLogin = async () => {
       const data = await currentUser();
 
-      console.log("Current user", data);
-
-      if (data.user) {
+      if (data && data.user) {
         router.push("/");
       }
     };

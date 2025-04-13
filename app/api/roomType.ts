@@ -24,3 +24,17 @@ export async function roomTypeGetWithHotelIdAndParams(
     return null;
   }
 }
+
+export async function roomTypeFindById(id: string) {
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
+
+    const response = await fetch(`${apiUrl}/api/room-type/${id}`);
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error roomTypeFindById:", error);
+    return null;
+  }
+}

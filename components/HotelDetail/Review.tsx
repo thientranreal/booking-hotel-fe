@@ -2,7 +2,6 @@
 
 import {
   Box,
-  Button,
   CircularProgress,
   Dialog,
   Divider,
@@ -18,6 +17,7 @@ import { reviewGetWithHotelId, reviewPost } from "@/app/api/review";
 import { hotelFindById } from "@/app/api/hotel";
 import { toast } from "react-toastify";
 import { currentUser } from "@/app/api/user";
+import { LoadingButton } from "@mui/lab";
 
 type Review = {
   id: number;
@@ -43,6 +43,7 @@ export default function Review() {
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingReview, setIsLoadingReview] = useState(false);
+  const [isLoadingPost, setIsLoadingPost] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -70,45 +71,57 @@ export default function Review() {
     }
 
     setError("");
-
-    const userData = await currentUser();
-    if (!userData.user) {
-      toast.warn("Bạn phải đăng nhập thì mới có thể đánh giá");
-      return;
-    }
-
-    // Post comment
-    const data = await reviewPost({
-      title,
-      rating,
-      content,
-      hotelId: params.hotelID,
-    });
-
-    if (data && data.doc) {
-      toast.success("Đăng đánh giá thành công");
-
-      setOverallRating((prev) => {
-        return {
-          rate: (prev.rate + Number(data.doc.score)) / 2,
-          reviewCount: prev.reviewCount + 1,
-        };
-      });
-
-      setReviews((prev) => [
-        {
-          id: data.doc.id,
-          title: data.doc.subject,
-          content: data.doc.content,
-          rating: data.doc.score,
-          date: data.doc.createdAt,
-        },
-        ...prev,
-      ]);
-    } else {
-      toast.error("Đăng đánh giá thất bại");
-    }
+    setIsLoadingPost(true);
   };
+
+  useEffect(() => {
+    if (isLoadingPost) {
+      const postReview = async () => {
+        const userData = await currentUser();
+        if (!userData.user) {
+          toast.warn("Bạn phải đăng nhập thì mới có thể đánh giá");
+          setIsLoadingPost(false);
+          return;
+        }
+
+        // Post comment
+        const data = await reviewPost({
+          title,
+          rating: rating ?? 0,
+          content,
+          hotelId: params.hotelID,
+        });
+
+        if (data && data.doc) {
+          toast.success("Đăng đánh giá thành công");
+
+          setOverallRating((prev) => {
+            return {
+              rate: (prev.rate + Number(data.doc.score)) / 2,
+              reviewCount: prev.reviewCount + 1,
+            };
+          });
+
+          setReviews((prev) => [
+            {
+              id: data.doc.id,
+              title: data.doc.subject,
+              content: data.doc.content,
+              rating: data.doc.score,
+              date: data.doc.createdAt,
+            },
+            ...prev,
+          ]);
+        } else {
+          toast.error("Đăng đánh giá thất bại");
+        }
+
+        setIsLoadingPost(false);
+      };
+
+      postReview();
+    }
+  }, [isLoadingPost]);
 
   // Get more reviews if current page changes
   useEffect(() => {
@@ -312,7 +325,9 @@ export default function Review() {
             onChange={(e) => setContent(e.target.value)}
             required
           />
-          <Button
+          <LoadingButton
+            loading={isLoadingPost}
+            loadingPosition="start"
             variant="contained"
             type="submit"
             fullWidth
@@ -328,11 +343,11 @@ export default function Review() {
                 boxShadow: 4,
                 backgroundColor: "#c9302c",
               },
-              transition: "background-color 0.3s, box-shadow 0.3s", // smooth hover effect
+              transition: "background-color 0.3s, box-shadow 0.3s",
             }}
           >
             Đăng review của bạn
-          </Button>
+          </LoadingButton>
         </Box>
       </Box>
       {/* End review section */}

@@ -46,6 +46,8 @@ export default function Review() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  const currentPageRef = useRef(currentPage);
+
   const boxRef = useRef<HTMLDivElement>(null);
 
   // Handle scroll to the bottom
@@ -56,8 +58,11 @@ export default function Review() {
     const isBottom =
       element.scrollHeight - element.scrollTop === element.clientHeight;
 
-    if (isBottom && currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
+    if (isBottom && currentPageRef.current < totalPages) {
+      setCurrentPage((prev) => {
+        currentPageRef.current = prev + 1;
+        return prev + 1;
+      });
     }
   };
 
@@ -108,6 +113,7 @@ export default function Review() {
     if (!isLoadingReview && currentPage > 1) {
       setIsLoadingReview(true);
     }
+    currentPageRef.current = currentPage;
   }, [currentPage]);
 
   useEffect(() => {

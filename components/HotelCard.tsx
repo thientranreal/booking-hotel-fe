@@ -69,7 +69,7 @@ export default function HotelCard() {
                 element.hotel.image[0].image.url,
               name: element.hotel.name,
               address: element.hotel.address,
-              score: element.hotel.reviews.rate,
+              score: element.hotel.reviews.score,
               amenities: element.hotel.amenities,
               price: element.Price,
             }))
@@ -129,7 +129,11 @@ export default function HotelCard() {
                 </Typography>
               </Link>
               <Box display="flex" alignItems="center" gap={0.5}>
-                <RatingReadOnly value={3} showLabel={false} size="small" />
+                <RatingReadOnly
+                  value={hotel.score}
+                  showLabel={false}
+                  size="small"
+                />
                 <span>-</span>
                 <Typography variant="body2" color="text.secondary" m={0} p={0}>
                   {hotel.address}

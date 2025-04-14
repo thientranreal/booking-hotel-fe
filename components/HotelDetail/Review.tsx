@@ -44,6 +44,7 @@ export default function Review() {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingReview, setIsLoadingReview] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const boxRef = useRef<HTMLDivElement>(null);
 
@@ -55,7 +56,7 @@ export default function Review() {
     const isBottom =
       element.scrollHeight - element.scrollTop === element.clientHeight;
 
-    if (isBottom) {
+    if (isBottom && currentPage < totalPages) {
       setCurrentPage((prev) => prev + 1);
     }
   };
@@ -145,12 +146,14 @@ export default function Review() {
         // set overall rating
         if (hotelData) {
           setOverallRating({
-            rate: hotelData.reviews.rate,
+            rate: hotelData.reviews.score,
             reviewCount: hotelData.reviews.review_count,
           });
         }
 
         if (data && data.docs && data.docs.length >= 1) {
+          setTotalPages(data.totalPages);
+
           setReviews(
             data.docs.map((review: any) => ({
               id: review.id,

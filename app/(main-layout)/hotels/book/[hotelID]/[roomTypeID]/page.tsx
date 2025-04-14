@@ -68,7 +68,7 @@ export default function BookingSummary() {
 
       if (hotelData) {
         setHotelInfo({
-          rate: hotelData.reviews.rate,
+          rate: hotelData.reviews.score,
           name: hotelData.name,
           address: hotelData.address,
           img:

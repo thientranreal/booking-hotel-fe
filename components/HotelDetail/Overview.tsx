@@ -36,7 +36,7 @@ export default function Overview({
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [review, setReview] = useState({
-    rate: 0,
+    score: 0,
     review_count: 0,
   });
   const [description, setDescription] = useState("");
@@ -108,7 +108,7 @@ export default function Overview({
 
               <Box mt={2} display="flex" alignItems="center" gap={1}>
                 <RatingReadOnly
-                  value={review.rate}
+                  value={review.score}
                   size="medium"
                   showLabel={false}
                 />

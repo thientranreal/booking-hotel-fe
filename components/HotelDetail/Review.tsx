@@ -88,6 +88,13 @@ export default function Review() {
     if (data && data.doc) {
       toast.success("Đăng đánh giá thành công");
 
+      setOverallRating((prev) => {
+        return {
+          rate: (prev.rate + Number(data.doc.score)) / 2,
+          reviewCount: prev.reviewCount + 1,
+        };
+      });
+
       setReviews((prev) => [
         {
           id: data.doc.id,

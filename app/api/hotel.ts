@@ -34,6 +34,23 @@ export async function hotelGetWithParams(
     paramsConstruct.append("startDate", params.fromDate);
     paramsConstruct.append("endDate", params.untilDate);
     paramsConstruct.append("guests", params.guests);
+
+    if (params.amentities) {
+      paramsConstruct.append("amentities", params.amentities);
+    }
+
+    if (params.stars) {
+      paramsConstruct.append("star", params.stars);
+    }
+
+    if (params.priceFrom) {
+      paramsConstruct.append("priceFrom", params.priceFrom);
+    }
+
+    if (params.priceTo) {
+      paramsConstruct.append("priceTo", params.priceTo);
+    }
+
     paramsConstruct.append("page", page);
 
     const finalUrl = `${baseUrl}?${paramsConstruct}`;

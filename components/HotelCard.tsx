@@ -56,6 +56,10 @@ export default function HotelCard() {
             fromDate,
             untilDate,
             guests,
+            amenities,
+            stars,
+            priceFrom,
+            priceTo,
           },
           page
         );

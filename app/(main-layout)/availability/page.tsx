@@ -26,16 +26,40 @@ export default function Availability() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  const MAX_VISIBLE = 6;
+
+  const [expand, setExpand] = useState(false);
+
   const [openFilter, setOpenFilter] = useState(false);
   const [sortBy, setSortBy] = useState("");
   const [amenities, setAmenities] = useState([
-    { name: "Hồ bơi", check: false },
-    { name: "Spa", check: false },
-    { name: "Gym", check: false },
-    { name: "Cho phép thú cưng", check: false },
-    { name: "Nhà hàng", check: false },
-    { name: "Đậu xe", check: false },
-    { name: "Wifi", check: false },
+    { name: "WiFi", check: false },
+    { name: "Hồ bơi (Swimming Pool)", check: false },
+    { name: "Trung tâm thể dục (Fitness Center)", check: false },
+    { name: "Spa & Chăm sóc sức khỏe (Spa & Wellness)", check: false },
+    { name: "Nhà hàng (Restaurant)", check: false },
+    { name: "Quầy bar (Bar)", check: false },
+    { name: "Đưa đón sân bay (Airport Shuttle)", check: false },
+    { name: "Đỗ xe miễn phí (Free Parking)", check: false },
+    { name: "Lễ tân 24 giờ (24-hour Front Desk)", check: false },
+    { name: "Dịch vụ phòng (Room Service)", check: false },
+    { name: "Máy lạnh (Air Conditioning)", check: false },
+    { name: "Phòng không hút thuốc (Non-smoking Rooms)", check: false },
+    { name: "Phòng gia đình (Family Rooms)", check: false },
+    { name: "Cho phép mang vật nuôi (Pet-friendly)", check: false },
+    { name: "Trung tâm dịch vụ doanh nhân (Business Center)", check: false },
+    { name: "Tiện nghi tổ chức hội họp (Meeting Facilities)", check: false },
+    { name: "Dịch vụ giặt là (Laundry Service)", check: false },
+    { name: "Dịch vụ trợ giúp đặc biệt (Concierge Service)", check: false },
+    { name: "Cho thuê xe đạp (Bicycle Rental)", check: false },
+    { name: "Cho thuê xe hơi (Car Rental)", check: false },
+    { name: "Phòng xông hơi khô (Sauna)", check: false },
+    { name: "Bồn tắm nước nóng (Hot Tub)", check: false },
+    { name: "Giáp biển (Beachfront)", check: false },
+    { name: "Dịch vụ trông trẻ (Childcare Services)", check: false },
+    { name: "Sòng bạc (Casino)", check: false },
+    { name: "Sân gôn (Golf Course)", check: false },
+    { name: "Sân tennis (Tennis Court)", check: false },
   ]);
 
   const [star, setStar] = useState([
@@ -197,23 +221,35 @@ export default function Availability() {
           <Box>
             <Typography fontWeight="bold">Cơ sở vật chất</Typography>
             <FormGroup>
-              {amenities.map((element, index) => (
-                <FormControlLabel
-                  key={element.name}
-                  control={
-                    <Checkbox
-                      checked={element.check}
-                      onChange={(event) => {
-                        let temp = [...amenities];
-                        temp[index].check = event.target.checked;
-                        setAmenities(temp);
-                      }}
-                    />
-                  }
-                  label={element.name}
-                />
-              ))}
+              {(expand ? amenities : amenities.slice(0, MAX_VISIBLE)).map(
+                (element, index) => (
+                  <FormControlLabel
+                    key={element.name}
+                    control={
+                      <Checkbox
+                        checked={element.check}
+                        onChange={(event) => {
+                          let temp = [...amenities];
+                          temp[index].check = event.target.checked;
+                          setAmenities(temp);
+                        }}
+                      />
+                    }
+                    label={element.name}
+                  />
+                )
+              )}
             </FormGroup>
+
+            {amenities.length > MAX_VISIBLE && (
+              <Button
+                onClick={() => setExpand(!expand)}
+                size="small"
+                sx={{ mt: 1, textTransform: "none" }}
+              >
+                {expand ? "Thu gọn" : "Xem thêm"}
+              </Button>
+            )}
           </Box>
 
           <Divider />

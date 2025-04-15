@@ -58,23 +58,32 @@ export default function BookingSummary() {
         router.push("/login");
       }
 
-      const roomTypeData = await roomTypeFindById(params.roomTypeID);
+      const fromDate = queryParams.get("fromDate");
+      const untilDate = queryParams.get("untilDate");
 
-      if (roomTypeData) {
-        console.log(roomTypeData);
-      }
+      if (fromDate && untilDate) {
+        const roomTypeData = await roomTypeFindById(
+          params.roomTypeID,
+          fromDate,
+          untilDate
+        );
 
-      const hotelData = await hotelFindById(params.hotelID);
+        if (roomTypeData) {
+          console.log(roomTypeData);
+        }
 
-      if (hotelData) {
-        setHotelInfo({
-          rate: hotelData.reviews.score,
-          name: hotelData.name,
-          address: hotelData.address,
-          img:
-            process.env.NEXT_PUBLIC_PAYLOAD_API_URL +
-            hotelData.image[0].image.url,
-        });
+        const hotelData = await hotelFindById(params.hotelID);
+
+        if (hotelData) {
+          setHotelInfo({
+            rate: hotelData.reviews.score,
+            name: hotelData.name,
+            address: hotelData.address,
+            img:
+              process.env.NEXT_PUBLIC_PAYLOAD_API_URL +
+              hotelData.image[0].image.url,
+          });
+        }
       }
     };
 

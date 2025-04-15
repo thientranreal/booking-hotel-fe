@@ -25,11 +25,17 @@ export async function roomTypeGetWithHotelIdAndParams(
   }
 }
 
-export async function roomTypeFindById(id: string) {
+export async function roomTypeFindById(
+  id: string,
+  startDate: string,
+  endDate: string
+) {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
 
-    const response = await fetch(`${apiUrl}/api/room-types/${id}`);
+    const response = await fetch(
+      `${apiUrl}/api/room-type-inventory/detail/${id}?startDate=${startDate}&endDate=${endDate}`
+    );
 
     const data = await response.json();
     return data;

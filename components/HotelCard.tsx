@@ -60,6 +60,7 @@ export default function HotelCard() {
             stars,
             priceFrom,
             priceTo,
+            sortBy,
           },
           page
         );

@@ -14,13 +14,19 @@ import {
   Button,
 } from "@mui/material";
 import Image from "next/image";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function BookingSummary() {
   const params = useParams<{ hotelID: string; roomTypeID: string }>();
   const queryParams = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
 
   const [hotelInfo, setHotelInfo] = useState({
     rate: 0,
@@ -30,8 +36,8 @@ export default function BookingSummary() {
   });
 
   const [roomInfo, setRoomInfo] = useState({
-    name: "Hello negga",
-    price: 300000,
+    name: "",
+    price: 0,
   });
 
   const [form, setForm] = useState({
@@ -55,7 +61,9 @@ export default function BookingSummary() {
           phone: data.user.phone || "",
         });
       } else {
-        router.push("/login");
+        const fullPath = `${pathname}?${queryParams.toString()}`;
+
+        router.push(`/login?redirect=${encodeURIComponent(fullPath)}`);
       }
 
       const fromDate = queryParams.get("fromDate");
@@ -70,6 +78,11 @@ export default function BookingSummary() {
 
         if (roomTypeData) {
           console.log(roomTypeData);
+
+          setRoomInfo({
+            name: roomTypeData.hotel_name,
+            price: roomTypeData.price,
+          });
         }
 
         const hotelData = await hotelFindById(params.hotelID);
@@ -202,7 +215,7 @@ export default function BookingSummary() {
 
           <Box>
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-              Total:{" "}
+              Tổng cộng:{" "}
               {(
                 diffDate(
                   queryParams.get("fromDate"),

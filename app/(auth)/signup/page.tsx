@@ -2,7 +2,7 @@
 
 import { Button, TextField, Grid, Typography, Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { validateEmail, validatePhoneNumber } from "@/utils/validators";
 import { LoadingButton } from "@mui/lab";
 import { userCreate, userLogout } from "@/app/api/user";
@@ -18,6 +18,7 @@ export default function Signup() {
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
+  const queryParams = useSearchParams();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,7 +56,14 @@ export default function Signup() {
 
           // Logout current user if exist
           await userLogout();
-          router.push("/login");
+
+          const redirect = queryParams.get("redirect");
+
+          router.push(
+            redirect
+              ? `/login?redirect=${encodeURIComponent(redirect)}`
+              : "/login"
+          );
         }
 
         setIsLoading(false);

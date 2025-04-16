@@ -35,12 +35,18 @@ export async function hotelGetWithParams(
     paramsConstruct.append("endDate", params.untilDate);
     paramsConstruct.append("guests", params.guests);
 
-    if (params.amentities) {
-      paramsConstruct.append("amentities", params.amentities);
+    if (Array.isArray(params.amenities)) {
+      const joinedAmenities = params.amenities
+        .map((a: string) => a.trim())
+        .join(",");
+
+      paramsConstruct.append("amentities", joinedAmenities);
     }
 
-    if (params.stars) {
-      paramsConstruct.append("star", params.stars);
+    if (Array.isArray(params.stars)) {
+      const joinedStar = params.stars.map((a: string) => a.trim()).join(",");
+
+      paramsConstruct.append("star", joinedStar);
     }
 
     if (params.priceFrom) {
@@ -49,6 +55,10 @@ export async function hotelGetWithParams(
 
     if (params.priceTo) {
       paramsConstruct.append("priceTo", params.priceTo);
+    }
+
+    if (params.sortBy) {
+      paramsConstruct.append("sortBy", params.sortBy);
     }
 
     paramsConstruct.append("page", page);

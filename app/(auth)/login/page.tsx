@@ -2,12 +2,14 @@
 
 import { Button, TextField, Grid, Typography, Box } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { currentUser, userLogin } from "@/app/api/user";
 import { toast } from "react-toastify";
 
 export default function Login() {
+  const queryParams = useSearchParams();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -20,7 +22,7 @@ export default function Login() {
       const data = await currentUser();
 
       if (data && data.user) {
-        router.push("/");
+        router.push(queryParams.get("redirect") || "/");
       }
     };
 
@@ -51,7 +53,7 @@ export default function Login() {
         } else {
           console.log("Đăng nhập thành công ", data);
           toast.success("Đăng nhập thành công");
-          router.push("/");
+          router.push(queryParams.get("redirect") || "/");
         }
 
         setIsLoading(false);
@@ -116,7 +118,17 @@ export default function Login() {
       </form>
       <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
         <Grid item>
-          <Button onClick={() => router.push("/signup")}>
+          <Button
+            onClick={() => {
+              const redirect = queryParams.get("redirect");
+
+              router.push(
+                redirect
+                  ? `/signup?redirect=${encodeURIComponent(redirect)}`
+                  : "/signup"
+              );
+            }}
+          >
             Chưa có tài khoản? Đăng ký
           </Button>
         </Grid>

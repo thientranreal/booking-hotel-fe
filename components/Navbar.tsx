@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import SearchBar from "./SearchBar";
 import dayjs from "dayjs";
 import { currentUser, userLogout } from "@/app/api/user";
@@ -35,6 +35,7 @@ const settings = [
 export default function Navbar() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
 
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
@@ -52,6 +53,12 @@ export default function Navbar() {
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpenSidebar(newOpen);
+  };
+
+  const handleLoginOnClick = () => {
+    const fullPath = `${pathname}?${searchParams.toString()}`;
+
+    router.push(`/login?redirect=${encodeURIComponent(fullPath)}`);
   };
 
   useEffect(() => {
@@ -267,7 +274,11 @@ export default function Navbar() {
               </>
             ) : (
               <Box display={{ xs: "none", md: "flex" }} py={1} gap={2}>
-                <Button variant="outlined" component="a" href="/login">
+                <Button
+                  variant="outlined"
+                  component="a"
+                  onClick={handleLoginOnClick}
+                >
                   Đăng nhập
                 </Button>
               </Box>
@@ -277,20 +288,24 @@ export default function Navbar() {
       </Container>
     </AppBar>
   );
-}
 
-function SideNav({ isLogin }: { isLogin: boolean }) {
-  return (
-    <List>
-      <Divider sx={{ mt: "5rem" }} />
+  function SideNav({ isLogin }: { isLogin: boolean }) {
+    return (
+      <List>
+        <Divider sx={{ mt: "5rem" }} />
 
-      {!isLogin && (
-        <Box display="flex" flexDirection="column" gap={2} p={2}>
-          <Button variant="outlined" component="a" href="/login">
-            Đăng nhập
-          </Button>
-        </Box>
-      )}
-    </List>
-  );
+        {!isLogin && (
+          <Box display="flex" flexDirection="column" gap={2} p={2}>
+            <Button
+              variant="outlined"
+              component="a"
+              onClick={handleLoginOnClick}
+            >
+              Đăng nhập
+            </Button>
+          </Box>
+        )}
+      </List>
+    );
+  }
 }

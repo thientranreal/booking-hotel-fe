@@ -1,7 +1,14 @@
 "use client";
 
-import { Button, TextField, Grid, Typography, Box } from "@mui/material";
-import { useEffect, useState } from "react";
+import {
+  Button,
+  TextField,
+  Grid,
+  Typography,
+  Box,
+  CircularProgress,
+} from "@mui/material";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { validateEmail, validatePhoneNumber } from "@/utils/validators";
 import { LoadingButton } from "@mui/lab";
@@ -74,81 +81,83 @@ export default function Signup() {
   }, [isLoading]);
 
   return (
-    <Box
-      sx={{
-        maxWidth: 400,
-        margin: "auto",
-        padding: 2,
-        border: "1px solid #ddd",
-        borderRadius: 2,
-      }}
-    >
-      <Typography variant="h5" align="center" gutterBottom>
-        Đăng ký
-      </Typography>
-      {error && <Typography color="error">{error}</Typography>}
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Email"
-          fullWidth
-          margin="normal"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <TextField
-          label="Tên"
-          fullWidth
-          margin="normal"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <TextField
-          label="Số điện thoại"
-          fullWidth
-          margin="normal"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          required
-        />
-        <TextField
-          label="Mật khẩu"
-          type="password"
-          fullWidth
-          margin="normal"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <TextField
-          label="Nhập lại mật khẩu"
-          type="password"
-          fullWidth
-          margin="normal"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
-        <LoadingButton
-          loading={isLoading}
-          loadingPosition="end"
-          variant="contained"
-          fullWidth
-          type="submit"
-          sx={{ mt: 2 }}
-        >
+    <Suspense fallback={<CircularProgress />}>
+      <Box
+        sx={{
+          maxWidth: 400,
+          margin: "auto",
+          padding: 2,
+          border: "1px solid #ddd",
+          borderRadius: 2,
+        }}
+      >
+        <Typography variant="h5" align="center" gutterBottom>
           Đăng ký
-        </LoadingButton>
-      </form>
-      <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
-        <Grid item>
-          <Button onClick={() => router.push("/login")}>
-            Đã có tài khoản? Đăng nhập
-          </Button>
+        </Typography>
+        {error && <Typography color="error">{error}</Typography>}
+        <form onSubmit={handleSubmit}>
+          <TextField
+            label="Email"
+            fullWidth
+            margin="normal"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <TextField
+            label="Tên"
+            fullWidth
+            margin="normal"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <TextField
+            label="Số điện thoại"
+            fullWidth
+            margin="normal"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+          />
+          <TextField
+            label="Mật khẩu"
+            type="password"
+            fullWidth
+            margin="normal"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <TextField
+            label="Nhập lại mật khẩu"
+            type="password"
+            fullWidth
+            margin="normal"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+          <LoadingButton
+            loading={isLoading}
+            loadingPosition="end"
+            variant="contained"
+            fullWidth
+            type="submit"
+            sx={{ mt: 2 }}
+          >
+            Đăng ký
+          </LoadingButton>
+        </form>
+        <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
+          <Grid item>
+            <Button onClick={() => router.push("/login")}>
+              Đã có tài khoản? Đăng nhập
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
-    </Box>
+      </Box>
+    </Suspense>
   );
 }

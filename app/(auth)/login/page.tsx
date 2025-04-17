@@ -1,9 +1,16 @@
 "use client";
 
-import { Button, TextField, Grid, Typography, Box } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Grid,
+  Typography,
+  Box,
+  CircularProgress,
+} from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { currentUser, userLogin } from "@/app/api/user";
 import { toast } from "react-toastify";
 
@@ -74,65 +81,67 @@ export default function Login() {
   };
 
   return (
-    <Box
-      sx={{
-        maxWidth: 400,
-        margin: "auto",
-        padding: 2,
-        border: "1px solid #ddd",
-        borderRadius: 2,
-      }}
-    >
-      <Typography variant="h5" align="center" gutterBottom>
-        Đăng nhập
-      </Typography>
-      {error && <Typography color="error">{error}</Typography>}
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Email"
-          fullWidth
-          margin="normal"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <TextField
-          label="Password"
-          type="password"
-          fullWidth
-          margin="normal"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <LoadingButton
-          loading={isLoading}
-          loadingPosition="end"
-          variant="contained"
-          fullWidth
-          type="submit"
-          sx={{ mt: 2 }}
-        >
+    <Suspense fallback={<CircularProgress />}>
+      <Box
+        sx={{
+          maxWidth: 400,
+          margin: "auto",
+          padding: 2,
+          border: "1px solid #ddd",
+          borderRadius: 2,
+        }}
+      >
+        <Typography variant="h5" align="center" gutterBottom>
           Đăng nhập
-        </LoadingButton>
-      </form>
-      <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
-        <Grid item>
-          <Button
-            onClick={() => {
-              const redirect = queryParams.get("redirect");
-
-              router.push(
-                redirect
-                  ? `/signup?redirect=${encodeURIComponent(redirect)}`
-                  : "/signup"
-              );
-            }}
+        </Typography>
+        {error && <Typography color="error">{error}</Typography>}
+        <form onSubmit={handleSubmit}>
+          <TextField
+            label="Email"
+            fullWidth
+            margin="normal"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <TextField
+            label="Password"
+            type="password"
+            fullWidth
+            margin="normal"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <LoadingButton
+            loading={isLoading}
+            loadingPosition="end"
+            variant="contained"
+            fullWidth
+            type="submit"
+            sx={{ mt: 2 }}
           >
-            Chưa có tài khoản? Đăng ký
-          </Button>
+            Đăng nhập
+          </LoadingButton>
+        </form>
+        <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
+          <Grid item>
+            <Button
+              onClick={() => {
+                const redirect = queryParams.get("redirect");
+
+                router.push(
+                  redirect
+                    ? `/signup?redirect=${encodeURIComponent(redirect)}`
+                    : "/signup"
+                );
+              }}
+            >
+              Chưa có tài khoản? Đăng ký
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
-    </Box>
+      </Box>
+    </Suspense>
   );
 }

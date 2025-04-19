@@ -32,9 +32,12 @@ export default function Review() {
 
   const params = useParams<{ hotelID: string }>();
 
-  const [overallRating, setOverallRating] = useState({
-    rate: 0,
-    reviewCount: 0,
+  const [overallRating, setOverallRating] = useState<{
+    rate: number | null;
+    reviewCount: number | null;
+  }>({
+    rate: null,
+    reviewCount: null,
   });
   const [reviews, setReviews] = useState<Review[]>([]);
   const [rating, setRating] = useState<number | null>(0);
@@ -96,9 +99,19 @@ export default function Review() {
           toast.success("Đăng đánh giá thành công");
 
           setOverallRating((prev) => {
+            const prevRate = prev.rate ?? 0;
+            const prevCount = prev.reviewCount ?? 0;
+
+            if (prevCount === 0) {
+              return {
+                rate: Number(data.doc.score),
+                reviewCount: 1,
+              };
+            }
+
             return {
-              rate: (prev.rate + Number(data.doc.score)) / 2,
-              reviewCount: prev.reviewCount + 1,
+              rate: (prevRate + Number(data.doc.score)) / 2,
+              reviewCount: prevCount + 1,
             };
           });
 
@@ -205,7 +218,7 @@ export default function Review() {
       ) : (
         <>
           <Box display="flex" alignItems="center" gap={1}>
-            <RatingReadOnly value={overallRating.rate} size="medium" />
+            <RatingReadOnly value={overallRating.rate || 0} size="medium" />
             <Typography variant="body2" color="text.secondary">
               {overallRating.rate}/5 (dựa trên {overallRating.reviewCount} đánh
               giá)
@@ -235,7 +248,7 @@ export default function Review() {
                 Đánh giá khách hàng
               </Typography>
               <Divider />
-              <RatingReadOnly size="large" value={overallRating.rate} />
+              <RatingReadOnly size="large" value={overallRating.rate || 0} />
               <Divider />
               <Box
                 ref={boxRef}

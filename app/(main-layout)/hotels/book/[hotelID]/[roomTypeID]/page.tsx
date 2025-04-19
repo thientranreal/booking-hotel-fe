@@ -94,7 +94,11 @@ export default function BookingSummary() {
             address: hotelData.address,
             img:
               process.env.NEXT_PUBLIC_PAYLOAD_API_URL +
-              hotelData.image[0].image.url,
+              `${
+                hotelData.image.length > 0
+                  ? hotelData.image[0].image.url
+                  : "/api/media/file/not-found-img.jpg"
+              }`,
           });
         }
       }

@@ -71,7 +71,11 @@ export default function HotelCard() {
               id: element.hotel.id,
               image:
                 process.env.NEXT_PUBLIC_PAYLOAD_API_URL +
-                element.hotel.image[0].image.url,
+                `${
+                  element.hotel.image.length > 0
+                    ? element.hotel.image[0].image.url
+                    : "/api/media/file/not-found-img.jpg"
+                }`,
               name: element.hotel.name,
               address: element.hotel.address,
               score: element.hotel.reviews.score,

@@ -2,9 +2,10 @@
 
 import DateRangeSelector from "@/components/DateRangeSelector";
 import { Box, TextField, Button, Typography } from "@mui/material";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { useRouter } from "next/navigation";
+import handleEnterKey from "@/utils/handleEnterKey";
 
 export default function SearchBar({
   placeInput = "",
@@ -37,9 +38,14 @@ export default function SearchBar({
     date: false,
     guests: false,
   });
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const formatDate = (date: Dayjs) => {
     return `${date.year()}-${date.month() + 1}-${date.date()}`;
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    handleEnterKey(e, buttonRef);
   };
 
   const handleSearch = () => {
@@ -94,6 +100,7 @@ export default function SearchBar({
         placeholder="Tìm kiếm"
         variant="outlined"
         value={place || ""}
+        onKeyDown={handleKeyDown}
         onChange={(e) => setPlace(e.target.value)}
         error={error.place}
       />
@@ -120,6 +127,7 @@ export default function SearchBar({
         value={guests || 2}
         onChange={(e) => setGuests(Number(e.target.value))}
         error={error.guests}
+        onKeyDown={handleKeyDown}
       />
 
       <Button
@@ -127,6 +135,7 @@ export default function SearchBar({
         color="primary"
         sx={{ mt: 2, py: 1.5 }}
         onClick={handleSearch}
+        ref={buttonRef}
       >
         Tìm kiếm
       </Button>

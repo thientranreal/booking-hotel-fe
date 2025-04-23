@@ -40,7 +40,7 @@ export async function hotelGetWithParams(
         .map((a: string) => a.trim())
         .join(",");
 
-      paramsConstruct.append("amentities", joinedAmenities);
+      paramsConstruct.append("amenities", joinedAmenities);
     }
 
     if (Array.isArray(params.stars) && params.stars.length > 0) {

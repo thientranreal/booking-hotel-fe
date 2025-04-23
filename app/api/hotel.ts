@@ -35,7 +35,7 @@ export async function hotelGetWithParams(
     paramsConstruct.append("endDate", params.untilDate);
     paramsConstruct.append("guests", params.guests);
 
-    if (Array.isArray(params.amenities)) {
+    if (Array.isArray(params.amenities) && params.amenities.length > 0) {
       const joinedAmenities = params.amenities
         .map((a: string) => a.trim())
         .join(",");
@@ -43,7 +43,7 @@ export async function hotelGetWithParams(
       paramsConstruct.append("amentities", joinedAmenities);
     }
 
-    if (Array.isArray(params.stars)) {
+    if (Array.isArray(params.stars) && params.stars.length > 0) {
       const joinedStar = params.stars.map((a: string) => a.trim()).join(",");
 
       paramsConstruct.append("star", joinedStar);
@@ -64,6 +64,8 @@ export async function hotelGetWithParams(
     paramsConstruct.append("page", page);
 
     const finalUrl = `${baseUrl}?${paramsConstruct}`;
+
+    console.log(finalUrl);
 
     const response = await fetch(finalUrl);
 

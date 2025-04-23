@@ -3,6 +3,7 @@ import RoomCard from "../RoomCard";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { roomTypeGetWithHotelIdAndParams } from "@/app/api/roomType";
+import { toast } from "react-toastify";
 
 interface roomType {
   id: string;
@@ -38,7 +39,9 @@ export default function InfoPrice() {
           guests,
         });
 
-        if (data) {
+        if (data.error) {
+          toast.error(data.error);
+        } else {
           setRoomTypes(
             data.map((room: any) => ({
               id: room.id,

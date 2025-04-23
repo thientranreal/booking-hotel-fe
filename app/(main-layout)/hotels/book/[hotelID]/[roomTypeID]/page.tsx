@@ -77,8 +77,6 @@ export default function BookingSummary() {
         );
 
         if (roomTypeData) {
-          console.log(roomTypeData);
-
           setRoomInfo({
             name: roomTypeData.hotel_name,
             price: roomTypeData.price,

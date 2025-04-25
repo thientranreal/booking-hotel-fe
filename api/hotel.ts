@@ -1,7 +1,7 @@
+const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
+
 export async function hotelGet(page: string | null = "1") {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
-
     if (!page) {
       page = "1";
     }
@@ -21,8 +21,6 @@ export async function hotelGetWithParams(
   page: string | null = "1"
 ) {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
-
     if (!page) {
       page = "1";
     }
@@ -79,8 +77,6 @@ export async function hotelGetWithParams(
 
 export async function hotelFindById(id: string) {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
-
     const response = await fetch(`${apiUrl}/api/hotel/${id}`);
 
     const data = await response.json();

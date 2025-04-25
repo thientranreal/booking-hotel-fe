@@ -1,6 +1,7 @@
 "use client";
 
 import { hotelFindById } from "@/api/hotel";
+import { reservationPost } from "@/api/reservation";
 import { roomTypeFindById } from "@/api/roomType";
 import { currentUser } from "@/api/user";
 import RatingReadOnly from "@/components/ui/RatingReadOnly";
@@ -27,6 +28,8 @@ export default function BookingSummary() {
   const queryParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+
+  const [userId, setUserId] = useState();
 
   const [hotelInfo, setHotelInfo] = useState({
     rate: 0,
@@ -55,6 +58,8 @@ export default function BookingSummary() {
       const data = await currentUser();
 
       if (data && data.user) {
+        setUserId(data.user.id);
+
         setForm({
           name: data.user.name,
           email: data.user.email,
@@ -104,6 +109,22 @@ export default function BookingSummary() {
 
     getConfirmData();
   }, []);
+
+  const handleClickReserve = async () => {
+    const fromDate = queryParams.get("fromDate");
+    const untilDate = queryParams.get("untilDate");
+
+    if (fromDate && untilDate && userId) {
+      const data = await reservationPost({
+        roomType: params.roomTypeID,
+        startDate: fromDate,
+        endDate: untilDate,
+        user: userId,
+      });
+
+      console.log(data);
+    }
+  };
 
   return (
     <Box
@@ -166,7 +187,9 @@ export default function BookingSummary() {
         </Grid>
 
         <Box display="flex" mt={4} justifyContent="flex-end">
-          <Button variant="contained">Tiếp theo</Button>
+          <Button variant="contained" onClick={handleClickReserve}>
+            Tiếp theo
+          </Button>
         </Box>
       </Box>
 

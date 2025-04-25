@@ -1,10 +1,10 @@
+const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
+
 export async function roomTypeGetWithHotelIdAndParams(
   hotelId: string,
   params: any
 ) {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
-
     const baseUrl = `${apiUrl}/api/room-type-inventory/search/detail/${hotelId}`;
 
     const paramsConstruct = new URLSearchParams();
@@ -31,8 +31,6 @@ export async function roomTypeFindById(
   endDate: string
 ) {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
-
     const response = await fetch(
       `${apiUrl}/api/room-type-inventory/detail/${id}?startDate=${startDate}&endDate=${endDate}`
     );

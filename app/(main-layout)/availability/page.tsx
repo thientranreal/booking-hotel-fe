@@ -1,6 +1,6 @@
 "use client";
 
-import HotelCard from "@/components/HotelCard";
+import HotelCard from "@/components/ui/HotelCard";
 import {
   Box,
   Button,

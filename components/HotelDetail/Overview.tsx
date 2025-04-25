@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Image from "next/image";
-import RatingReadOnly from "../RatingReadOnly";
+import RatingReadOnly from "../ui/RatingReadOnly";
 import { useEffect, useState } from "react";
 import { hotelFindById } from "@/api/hotel";
 import { useParams } from "next/navigation";

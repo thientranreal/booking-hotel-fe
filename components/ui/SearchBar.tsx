@@ -1,6 +1,6 @@
 "use client";
 
-import DateRangeSelector from "@/components/DateRangeSelector";
+import DateRangeSelector from "@/components/ui/DateRangeSelector";
 import { Box, TextField, Button, Typography } from "@mui/material";
 import { useRef, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";

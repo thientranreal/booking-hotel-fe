@@ -1,5 +1,5 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
-import RoomCard from "../RoomCard";
+import RoomCard from "../ui/RoomCard";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { roomTypeGetWithHotelIdAndParams } from "@/api/roomType";

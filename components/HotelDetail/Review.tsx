@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import RatingReadOnly from "../RatingReadOnly";
+import RatingReadOnly from "../ui/RatingReadOnly";
 import ReviewsCarousel from "./ReviewsCarousel";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";

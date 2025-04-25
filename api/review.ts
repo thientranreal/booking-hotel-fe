@@ -1,7 +1,7 @@
+const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
+
 export async function reviewGetWithHotelId(hotelId: string, page: number) {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
-
     const response = await fetch(
       `${apiUrl}/api/reviews?` +
         `where[hotel.id][equals]=${hotelId}&depth=0` +
@@ -23,8 +23,6 @@ export async function reviewPost(reviewData: {
   hotelId: string;
 }) {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
-
     const response = await fetch(`${apiUrl}/api/reviews`, {
       method: "POST",
       credentials: "include",

@@ -1,4 +1,4 @@
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/ui/Navbar";
 import { CircularProgress, Container } from "@mui/material";
 import { Suspense } from "react";
 

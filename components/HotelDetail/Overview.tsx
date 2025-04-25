@@ -10,7 +10,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Image from "next/image";
 import RatingReadOnly from "../RatingReadOnly";
 import { useEffect, useState } from "react";
-import { hotelFindById } from "@/app/api/hotel";
+import { hotelFindById } from "@/api/hotel";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
 import Link from "next/link";

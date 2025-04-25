@@ -23,7 +23,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import SearchBar from "./SearchBar";
 import dayjs from "dayjs";
-import { currentUser, userLogout } from "@/app/api/user";
+import { currentUser, userLogout } from "@/api/user";
 import { toast } from "react-toastify";
 
 const settings = [

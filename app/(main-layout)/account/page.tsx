@@ -1,6 +1,6 @@
 "use client";
 
-import { currentUser, userUpdate } from "@/app/api/user";
+import { currentUser, userUpdate } from "@/api/user";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";

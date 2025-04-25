@@ -2,7 +2,7 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import RoomCard from "../RoomCard";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { roomTypeGetWithHotelIdAndParams } from "@/app/api/roomType";
+import { roomTypeGetWithHotelIdAndParams } from "@/api/roomType";
 import { toast } from "react-toastify";
 
 interface roomType {

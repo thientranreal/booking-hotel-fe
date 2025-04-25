@@ -13,10 +13,10 @@ import RatingReadOnly from "../RatingReadOnly";
 import ReviewsCarousel from "./ReviewsCarousel";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
-import { reviewGetWithHotelId, reviewPost } from "@/app/api/review";
-import { hotelFindById } from "@/app/api/hotel";
+import { reviewGetWithHotelId, reviewPost } from "@/api/review";
+import { hotelFindById } from "@/api/hotel";
 import { toast } from "react-toastify";
-import { currentUser } from "@/app/api/user";
+import { currentUser } from "@/api/user";
 import { LoadingButton } from "@mui/lab";
 
 type Review = {

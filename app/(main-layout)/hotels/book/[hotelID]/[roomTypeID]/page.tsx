@@ -1,9 +1,9 @@
 "use client";
 
-import { hotelFindById } from "@/app/api/hotel";
-import { roomTypeFindById } from "@/app/api/roomType";
-import { currentUser } from "@/app/api/user";
-import RatingReadOnly from "@/components/RatingReadOnly";
+import { hotelFindById } from "@/api/hotel";
+import { roomTypeFindById } from "@/api/roomType";
+import { currentUser } from "@/api/user";
+import RatingReadOnly from "@/components/ui/RatingReadOnly";
 import diffDate from "@/utils/diffDate";
 import {
   Box,

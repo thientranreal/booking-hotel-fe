@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { validateEmail, validatePhoneNumber } from "@/utils/validators";
 import { LoadingButton } from "@mui/lab";
-import { userCreate, userLogout } from "@/app/api/user";
+import { userCreate, userLogout } from "@/api/user";
 import { toast } from "react-toastify";
 
 export default function SignupPage() {

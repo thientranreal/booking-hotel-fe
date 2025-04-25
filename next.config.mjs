@@ -4,7 +4,7 @@ const nextConfig = {
     domains: [
       "images.pexels.com",
       "localhost",
-      "booking-hotel-payload.vercel.app",
+      process.env.NEXT_PUBLIC_IMAGE_DOMAIN,
     ],
   },
 };

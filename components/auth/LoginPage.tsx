@@ -4,7 +4,7 @@ import { Button, TextField, Grid, Typography, Box } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { currentUser, userLogin } from "@/app/api/user";
+import { currentUser, userLogin } from "@/api/user";
 import { toast } from "react-toastify";
 
 export default function LoginPage() {

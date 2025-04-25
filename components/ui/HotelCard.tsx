@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { hotelGetWithParams } from "@/app/api/hotel";
+import { hotelGetWithParams } from "@/api/hotel";
 import Pagination from "./Pagination";
 
 interface Hotel {

@@ -32,3 +32,43 @@ export async function reservationPost(formData: {
     return null;
   }
 }
+
+export async function paymentPost(formData: {
+  reservationId: string;
+  roomType: {
+    id: string;
+    name: string;
+  };
+  startDate: string;
+  endDate: string;
+  userId: string;
+  totalPrice: number;
+  success: string;
+  cancel: string;
+}) {
+  try {
+    const response = await fetch(`${apiUrl}/api/reservation/payment`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: formData.reservationId,
+        room_type: formData.roomType,
+        start_date: formData.startDate,
+        end_date: formData.endDate,
+        user: formData.userId,
+        price: formData.totalPrice,
+        success_url: formData.success,
+        cancel_url: formData.cancel,
+      }),
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error reservation post:", error);
+    return null;
+  }
+}

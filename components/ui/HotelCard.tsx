@@ -1,4 +1,4 @@
-import { Typography, Button, Box, CircularProgress } from "@mui/material";
+import { Typography, Button, Box, CircularProgress, Chip } from "@mui/material";
 import RatingReadOnly from "./RatingReadOnly";
 import Image from "next/image";
 import Link from "next/link";
@@ -151,9 +151,11 @@ export default function HotelCard() {
 
               <Box display="flex" gap={2} mt={2} flexWrap="wrap">
                 {hotel.amenities.map((amenity) => (
-                  <Typography key={amenity + hotel.id} variant="body2">
-                    {amenity}
-                  </Typography>
+                  <Chip
+                    key={amenity + hotel.id}
+                    label={amenity}
+                    sx={{ fontSize: "0.875rem", fontWeight: 500 }}
+                  />
                 ))}
               </Box>
 
@@ -164,7 +166,9 @@ export default function HotelCard() {
                 alignItems="flex-end"
                 justifyContent="flex-end"
               >
-                <Typography variant="h6">{hotel.price} VND</Typography>
+                <Typography variant="h6">
+                  {hotel.price.toLocaleString()} VND
+                </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Đã bao gồm VAT
                 </Typography>

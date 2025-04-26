@@ -1,9 +1,10 @@
 "use client";
 
 import { hotelFindById } from "@/api/hotel";
-import { reservationPost } from "@/api/reservation";
+import { paymentPost, reservationPost } from "@/api/reservation";
 import { roomTypeFindById } from "@/api/roomType";
 import { currentUser } from "@/api/user";
+import BookingSuccessPage from "@/components/ui/BookingSuccessPage";
 import RatingReadOnly from "@/components/ui/RatingReadOnly";
 import diffDate from "@/utils/diffDate";
 import {
@@ -22,6 +23,7 @@ import {
   useSearchParams,
 } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function BookingSummary() {
   const params = useParams<{ hotelID: string; roomTypeID: string }>();
@@ -30,6 +32,19 @@ export default function BookingSummary() {
   const pathname = usePathname();
 
   const [userId, setUserId] = useState();
+
+  const [isBookingSuccess, setIsBookingSuccess] = useState(false);
+
+  const [formData, setFormData] = useState({
+    reservationId: "",
+    roomType: { id: "", name: "" },
+    startDate: "",
+    endDate: "",
+    userId: "",
+    totalPrice: 0,
+    success: "",
+    cancel: "",
+  });
 
   const [hotelInfo, setHotelInfo] = useState({
     rate: 0,
@@ -86,6 +101,15 @@ export default function BookingSummary() {
             name: roomTypeData.hotel_name,
             price: roomTypeData.price,
           });
+
+          // Calculate total price
+          const totalPrice =
+            diffDate(
+              queryParams.get("fromDate"),
+              queryParams.get("untilDate")
+            ) * roomTypeData.price;
+
+          setFormData((prev) => ({ ...prev, totalPrice }));
         }
 
         const hotelData = await hotelFindById(params.hotelID);
@@ -122,9 +146,43 @@ export default function BookingSummary() {
         user: userId,
       });
 
-      console.log(data);
+      if (data && data.doc) {
+        setIsBookingSuccess(true);
+
+        const formData = {
+          reservationId: data.doc.id,
+          roomType: { id: params.roomTypeID, name: roomInfo.name },
+          startDate: fromDate,
+          endDate: untilDate,
+          userId,
+          success: process.env.NEXT_PUBLIC_SUCCESS_PAGE ?? "",
+          cancel: process.env.NEXT_PUBLIC_CANCEL_PAGE ?? "",
+        };
+
+        setFormData((prev) => ({ ...prev, ...formData }));
+      } else {
+        toast.error(data?.errors[0]?.message);
+      }
     }
   };
+
+  const handleClickAcceptPayment = async () => {
+    if (formData) {
+      const data = await paymentPost(formData);
+
+      if (data && data.errors) {
+        toast.error(data.errors[0].message);
+      } else if (data && data.error) {
+        toast.error(data.error);
+      } else if (data && data.url) {
+        window.location.href = data.url;
+      }
+    }
+  };
+
+  if (isBookingSuccess) {
+    return <BookingSuccessPage onClick={handleClickAcceptPayment} />;
+  }
 
   return (
     <Box
@@ -240,14 +298,7 @@ export default function BookingSummary() {
 
           <Box>
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-              Tổng cộng:{" "}
-              {(
-                diffDate(
-                  queryParams.get("fromDate"),
-                  queryParams.get("untilDate")
-                ) * roomInfo.price
-              ).toLocaleString()}{" "}
-              VND
+              Tổng cộng: {formData.totalPrice.toLocaleString()} VND
             </Typography>
           </Box>
         </Box>

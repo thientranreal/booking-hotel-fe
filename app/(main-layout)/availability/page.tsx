@@ -63,11 +63,11 @@ export default function Availability() {
   ]);
 
   const [star, setStar] = useState([
-    { name: "1 sao", check: false },
-    { name: "2 sao", check: false },
-    { name: "3 sao", check: false },
-    { name: "4 sao", check: false },
-    { name: "5 sao", check: false },
+    { name: "1+", check: false },
+    { name: "2+", check: false },
+    { name: "3+", check: false },
+    { name: "4+", check: false },
+    { name: "5+", check: false },
   ]);
 
   const [priceRange, setPriceRange] = useState<[number, number]>([
@@ -94,10 +94,10 @@ export default function Availability() {
       params.delete("sortBy");
     }
 
-    params.delete("star");
-    star
-      .filter((item) => item.check)
-      .forEach((item) => params.append("star", item.name[0]));
+    const selectedStar = star.find((item) => item.check);
+    if (selectedStar) {
+      params.set("star", selectedStar.name[0]);
+    }
 
     params.delete("amenities");
     amenities
@@ -131,13 +131,16 @@ export default function Availability() {
       }))
     );
 
-    const selectedStars = searchParams.getAll("star");
-    setStar((prev) =>
-      prev.map((item) => ({
-        ...item,
-        check: selectedStars.includes(item.name[0]),
-      }))
-    );
+    const selectedStar = searchParams.get("star");
+
+    if (selectedStar) {
+      setStar((prev) =>
+        prev.map((item) => ({
+          ...item,
+          check: item.name.startsWith(selectedStar),
+        }))
+      );
+    }
 
     const sortValue = searchParams.get("sortBy") || "";
     setSortBy(sortValue);
@@ -263,10 +266,12 @@ export default function Availability() {
                   control={
                     <Checkbox
                       checked={element.check}
-                      onChange={(event) => {
-                        let temp = [...star];
-                        temp[index].check = event.target.checked;
-                        setStar(temp);
+                      onChange={() => {
+                        const updatedStars = star.map((item, i) => ({
+                          ...item,
+                          check: i === index, // Only the clicked one is true
+                        }));
+                        setStar(updatedStars);
                       }}
                     />
                   }

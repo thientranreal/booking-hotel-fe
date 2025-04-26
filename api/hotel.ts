@@ -35,7 +35,7 @@ export async function hotelGetWithParams(
 
     if (Array.isArray(params.amenities) && params.amenities.length > 0) {
       const joinedAmenities = params.amenities
-        .map((a: string) => a.trim())
+        .map((a: string) => a.trim().toLowerCase())
         .join(",");
 
       paramsConstruct.append("amenities", joinedAmenities);

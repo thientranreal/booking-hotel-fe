@@ -38,6 +38,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [userId, setUserId] = useState("");
 
   const [openSidebar, setOpenSidebar] = useState<boolean>(false);
   const [openSearch, setOpenSearch] = useState<boolean>(false);
@@ -66,6 +67,7 @@ export default function Navbar() {
       const data = await currentUser();
 
       if (data && data.user) {
+        setUserId(data.user.id);
         setIsLogin(true);
       }
     };
@@ -136,81 +138,84 @@ export default function Navbar() {
           </Box>
 
           {/* Search box */}
-          {searchParams.size > 0 && (
-            <>
-              <Box
-                onClick={() => setOpenSearch(true)}
-                display="flex"
-                gap={2}
-                alignItems="center"
-                justifyContent="space-between"
-                borderRadius={20}
-                boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
-                p="5px"
-                sx={{
-                  "&:hover": {
-                    cursor: "pointer",
-                    opacity: "80%",
-                  },
-                }}
-              >
-                <Typography
-                  fontWeight="bold"
-                  pl={2}
-                  maxWidth={150}
-                  sx={{
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  {searchParams.get("place")}
-                </Typography>
-                <Divider orientation="vertical" flexItem />
-
+          {searchParams.get("place") &&
+            searchParams.get("fromDate") &&
+            searchParams.get("untilDate") &&
+            searchParams.get("guests") && (
+              <>
                 <Box
-                  maxWidth={200}
+                  onClick={() => setOpenSearch(true)}
                   display="flex"
+                  gap={2}
+                  alignItems="center"
                   justifyContent="space-between"
-                >
-                  <Typography fontWeight="bold" mr={2}>
-                    {searchParams.get("fromDate")}
-                  </Typography>
-                  <Typography fontWeight="bold">
-                    {searchParams.get("untilDate")}
-                  </Typography>
-                </Box>
-                <Divider orientation="vertical" flexItem />
-
-                <Typography
-                  fontWeight="bold"
-                  maxWidth={70}
+                  borderRadius={20}
+                  boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
+                  p="5px"
                   sx={{
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
+                    "&:hover": {
+                      cursor: "pointer",
+                      opacity: "80%",
+                    },
                   }}
                 >
-                  {searchParams.get("guests")} người
-                </Typography>
+                  <Typography
+                    fontWeight="bold"
+                    pl={2}
+                    maxWidth={150}
+                    sx={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {searchParams.get("place")}
+                  </Typography>
+                  <Divider orientation="vertical" flexItem />
 
-                <IconButton aria-label="search">
-                  <SearchIcon />
-                </IconButton>
-              </Box>
-              <Dialog open={openSearch} onClose={() => setOpenSearch(false)}>
-                <Box p={5}>
-                  <SearchBar
-                    placeInput={searchParams.get("place") || ""}
-                    checkInDateInput={dayjs(searchParams.get("fromDate"))}
-                    checkOutDateInput={dayjs(searchParams.get("untilDate"))}
-                    guestsInput={Number(searchParams.get("guests")) || 2}
-                    setOpenSearch={setOpenSearch}
-                  />
+                  <Box
+                    maxWidth={200}
+                    display="flex"
+                    justifyContent="space-between"
+                  >
+                    <Typography fontWeight="bold" mr={2}>
+                      {searchParams.get("fromDate")}
+                    </Typography>
+                    <Typography fontWeight="bold">
+                      {searchParams.get("untilDate")}
+                    </Typography>
+                  </Box>
+                  <Divider orientation="vertical" flexItem />
+
+                  <Typography
+                    fontWeight="bold"
+                    maxWidth={70}
+                    sx={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {searchParams.get("guests")} người
+                  </Typography>
+
+                  <IconButton aria-label="search">
+                    <SearchIcon />
+                  </IconButton>
                 </Box>
-              </Dialog>
-            </>
-          )}
+                <Dialog open={openSearch} onClose={() => setOpenSearch(false)}>
+                  <Box p={5}>
+                    <SearchBar
+                      placeInput={searchParams.get("place") || ""}
+                      checkInDateInput={dayjs(searchParams.get("fromDate"))}
+                      checkOutDateInput={dayjs(searchParams.get("untilDate"))}
+                      guestsInput={Number(searchParams.get("guests")) || 2}
+                      setOpenSearch={setOpenSearch}
+                    />
+                  </Box>
+                </Dialog>
+              </>
+            )}
           {/* End Search box */}
 
           <Box display="flex" alignItems="center">
@@ -261,7 +266,9 @@ export default function Navbar() {
                           key={setting.page}
                           onClick={handleCloseUserMenu}
                           component={Link}
-                          href={`/${setting.page}`}
+                          href={`/${setting.page}${
+                            setting.page === "book-history" ? `/${userId}` : ""
+                          }`}
                         >
                           <Typography textAlign="center">
                             {setting.name}

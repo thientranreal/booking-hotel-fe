@@ -72,3 +72,20 @@ export async function paymentPost(formData: {
     return null;
   }
 }
+
+export async function reservationGet(userID: string, page: number) {
+  try {
+    const response = await fetch(
+      `${apiUrl}/api/reservation?where[user][equals]=${userID}&page=${page}`,
+      {
+        credentials: "include",
+      }
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error reservation get:", error);
+    return null;
+  }
+}

@@ -167,7 +167,7 @@ export default function BookingSummary() {
   };
 
   const handleClickAcceptPayment = async () => {
-    if (formData) {
+    if (formData.reservationId) {
       const data = await paymentPost(formData);
 
       if (data && data.errors) {

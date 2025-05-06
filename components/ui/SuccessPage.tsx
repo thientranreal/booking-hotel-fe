@@ -1,11 +1,11 @@
+"use client";
+
 import { Button, Card, CardContent, Typography, Box } from "@mui/material";
 import { CheckCircleOutline } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
 
-interface SuccessPageProps {
-  onNext?: () => void;
-}
-
-export default function SuccessPage({ onNext }: SuccessPageProps) {
+export default function SuccessPage() {
+  const router = useRouter();
   return (
     <Box
       display="flex"
@@ -38,7 +38,7 @@ export default function SuccessPage({ onNext }: SuccessPageProps) {
             variant="contained"
             size="large"
             fullWidth
-            onClick={onNext}
+            onClick={() => router.push("/")}
             sx={{
               bgcolor: "#22c55e",
               ":hover": { bgcolor: "#16a34a" },

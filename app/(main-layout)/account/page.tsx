@@ -1,6 +1,7 @@
 "use client";
 
 import { currentUser, userUpdate } from "@/api/user";
+import { validateEmail, validatePhoneNumber } from "@/utils/validators";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -31,8 +32,16 @@ export default function Account() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!validateEmail(formData.email)) {
+      toast.error("Email không hợp lệ!");
+      return;
+    }
+    if (!validatePhoneNumber(formData.phone)) {
+      toast.error("Số điện thoại không hợp lệ!");
+      return;
+    }
     if (formData.password && confirmPass !== formData.password) {
-      toast.warn("Mật khẩu xác nhận không đúng");
+      toast.warn("Mật khẩu không khớp!");
       return;
     }
     setLoading(true);

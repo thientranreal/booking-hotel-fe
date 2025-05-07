@@ -37,13 +37,8 @@ export default function BookingSummary() {
 
   const [formData, setFormData] = useState({
     reservationId: "",
-    roomType: { id: "", name: "" },
-    startDate: "",
-    endDate: "",
-    userId: "",
-    totalPrice: 0,
-    success: "",
-    cancel: "",
+    success: process.env.NEXT_PUBLIC_SUCCESS_PAGE ?? "",
+    cancel: process.env.NEXT_PUBLIC_CANCEL_PAGE ?? "",
   });
 
   const [hotelInfo, setHotelInfo] = useState({
@@ -101,15 +96,6 @@ export default function BookingSummary() {
             name: roomTypeData.hotel_name,
             price: roomTypeData.price,
           });
-
-          // Calculate total price
-          const totalPrice =
-            diffDate(
-              queryParams.get("fromDate"),
-              queryParams.get("untilDate")
-            ) * roomTypeData.price;
-
-          setFormData((prev) => ({ ...prev, totalPrice }));
         }
 
         const hotelData = await hotelFindById(params.hotelID);
@@ -149,17 +135,7 @@ export default function BookingSummary() {
       if (data && data.doc) {
         setIsBookingSuccess(true);
 
-        const formData = {
-          reservationId: data.doc.id,
-          roomType: { id: params.roomTypeID, name: roomInfo.name },
-          startDate: fromDate,
-          endDate: untilDate,
-          userId,
-          success: process.env.NEXT_PUBLIC_SUCCESS_PAGE ?? "",
-          cancel: process.env.NEXT_PUBLIC_CANCEL_PAGE ?? "",
-        };
-
-        setFormData((prev) => ({ ...prev, ...formData }));
+        setFormData((prev) => ({ ...prev, reservationId: data.doc.id }));
       } else {
         toast.error(data?.errors[0]?.message);
       }
@@ -298,7 +274,14 @@ export default function BookingSummary() {
 
           <Box>
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-              Tổng cộng: {formData.totalPrice.toLocaleString()} VND
+              Tổng cộng:{" "}
+              {(
+                diffDate(
+                  queryParams.get("fromDate"),
+                  queryParams.get("untilDate")
+                ) * roomInfo.price
+              ).toLocaleString()}{" "}
+              VND
             </Typography>
           </Box>
         </Box>

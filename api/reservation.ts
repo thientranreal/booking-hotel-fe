@@ -15,10 +15,10 @@ export async function reservationPost(formData: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        "room-type": formData.roomType,
+        room_type: formData.roomType, // roomTypeId
         start_date: formData.startDate,
         end_date: formData.endDate,
-        user: formData.user,
+        user: formData.user, // userId
         payment_status: formData.paymentStatus ?? "pending",
       }),
     });
@@ -46,8 +46,8 @@ export async function paymentPost(formData: {
       body: JSON.stringify({
         paymentRequest: {
           id: formData.reservationId,
-          success_url: formData.success,
-          cancel_url: formData.cancel,
+          success: formData.success,
+          cancel: formData.cancel,
         },
       }),
     });

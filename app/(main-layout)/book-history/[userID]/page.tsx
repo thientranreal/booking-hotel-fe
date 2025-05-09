@@ -1,6 +1,11 @@
 "use client";
 
-import { paymentPost, reservationGet } from "@/api/reservation";
+import {
+  paymentPost,
+  refundPost,
+  reservationGet,
+  reservationUpdateStatus,
+} from "@/api/reservation";
 import Pagination from "@/components/ui/Pagination";
 import {
   Box,
@@ -109,6 +114,40 @@ export default function BookingHistory() {
     }
   };
 
+  const handleCancel = async (
+    reservationId: string,
+    paymentStatus: BookingStatus
+  ) => {
+    if (paymentStatus === "pending" || paymentStatus === "unpaid") {
+      const confirmed = window.confirm("Bạn có muốn hủy đơn đặt này ?");
+      if (confirmed) {
+        const data = await reservationUpdateStatus(reservationId, "cancelled");
+
+        console.log(data);
+
+        if (data && data.errors) {
+          toast.error(data.errors[0].message);
+        } else {
+          toast.success("Đơn của bạn hủy thành công !");
+        }
+      }
+    } else if (paymentStatus === "paid") {
+      const confirmed = window.confirm("Bạn có muốn hoàn tiền đơn đặt này ?");
+
+      if (confirmed) {
+        const data = await refundPost(reservationId);
+
+        console.log(data);
+
+        if (data && data.status === "succeeded") {
+          toast.success("Đơn đặt của bạn đã hoàn tiền thành công !");
+        } else {
+          toast.error("Hoàn tiền thất bại !");
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;
 
@@ -166,7 +205,13 @@ export default function BookingHistory() {
                   )}
 
                   {!["cancelled", "failed"].includes(booking.status) && (
-                    <Button variant="outlined" color="error">
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() => {
+                        handleCancel(booking.id, booking.status);
+                      }}
+                    >
                       Hủy
                     </Button>
                   )}

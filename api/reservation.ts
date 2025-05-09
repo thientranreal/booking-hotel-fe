@@ -51,6 +51,29 @@ export async function paymentPost(reservationId: string) {
     const data = await response.json();
     return data;
   } catch (error) {
+    console.error("Error payment post:", error);
+    return null;
+  }
+}
+
+export async function refundPost(reservationId: string) {
+  try {
+    const response = await fetch(`${apiUrl}/api/reservation/refunds`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: reservationId,
+        success: success_url,
+        cancel: cancel_url,
+      }),
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
     console.error("Error reservation post:", error);
     return null;
   }
@@ -69,6 +92,30 @@ export async function reservationGet(userID: string, page: number) {
     return data;
   } catch (error) {
     console.error("Error reservation get:", error);
+    return null;
+  }
+}
+
+export async function reservationUpdateStatus(
+  reservationId: string,
+  status: "paid" | "unpaid" | "failed" | "pending" | "cancelled"
+) {
+  try {
+    const response = await fetch(`${apiUrl}/api/reservation/${reservationId}`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        payment_status: status,
+      }),
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error reservation update status:", error);
     return null;
   }
 }

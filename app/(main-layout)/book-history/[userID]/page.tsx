@@ -16,8 +16,6 @@ import {
   CardContent,
   Typography,
   Chip,
-  Button,
-  CircularProgress,
 } from "@mui/material";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -60,7 +58,7 @@ export default function BookingHistory() {
   const [bookings, setBookings] = useState<Booking[]>([]);
 
   const [loading, setLoading] = useState({
-    researvtionId: "",
+    reservationId: "",
     action: "",
     cancel: false,
     accept: false,
@@ -111,19 +109,15 @@ export default function BookingHistory() {
     }
   };
 
-  const handlePayment = async (reservationId: string) => {
-    const data = await paymentPost(reservationId);
-
-    if (data && data.errors) {
-      toast.error(data.errors[0].message);
-    } else if (data && data.error) {
-      toast.error(data.error);
-    } else if (data && data.url) {
-      window.location.href = data.url;
-    }
+  const handlePayment = (reservationId: string) => {
+    setLoading((prev) => ({
+      ...prev,
+      reservationId,
+      accept: true,
+    }));
   };
 
-  const handleCancel = async (
+  const handleCancel = (
     reservationId: string,
     paymentStatus: BookingStatus
   ) => {
@@ -160,8 +154,15 @@ export default function BookingHistory() {
     } else {
       toast.success("Đơn của bạn hủy thành công !");
 
-      fetchReservation(page);
+      await fetchReservation(page);
     }
+
+    setLoading((prev) => ({
+      ...prev,
+      reservationId: "",
+      action: "",
+      cancel: false,
+    }));
   };
 
   const refundPayment = async (reservationId: string) => {
@@ -174,25 +175,45 @@ export default function BookingHistory() {
     } else {
       toast.error("Hoàn tiền thất bại !");
     }
+
+    setLoading((prev) => ({
+      ...prev,
+      reservationId: "",
+      action: "",
+      cancel: false,
+    }));
+  };
+
+  const makePayment = async (reservationId: string) => {
+    const data = await paymentPost(reservationId);
+
+    setLoading((prev) => ({
+      ...prev,
+      reservationId: "",
+      accept: false,
+    }));
+
+    if (data && data.errors) {
+      toast.error(data.errors[0].message);
+    } else if (data && data.error) {
+      toast.error(data.error);
+    } else if (data && data.url) {
+      window.location.href = data.url;
+    }
   };
 
   useEffect(() => {
-    if (loading.cancel && loading.researvtionId) {
-      setLoading((prev) => ({
-        ...prev,
-        reservationId: "",
-        action: "",
-        cancel: false,
-      }));
-
+    if (loading.cancel && loading.reservationId) {
       if (loading.action === "cancel") {
         updateStatusToCancel(
-          loading.researvtionId,
+          loading.reservationId,
           Number(searchParams.get("page") ?? 1)
         );
       } else if (loading.action === "refund") {
-        refundPayment(loading.researvtionId);
+        refundPayment(loading.reservationId);
       }
+    } else if (loading.accept && loading.reservationId) {
+      makePayment(loading.reservationId);
     }
   }, [loading.cancel, loading.accept]);
 
@@ -240,7 +261,11 @@ export default function BookingHistory() {
                 />
                 <Box mt={2}>
                   {["pending", "unpaid"].includes(booking.status) && (
-                    <Button
+                    <LoadingButton
+                      loading={
+                        loading.reservationId === booking.id && loading.accept
+                      }
+                      loadingPosition="end"
                       variant="contained"
                       color="primary"
                       sx={{ mr: 1 }}
@@ -249,16 +274,15 @@ export default function BookingHistory() {
                       }}
                     >
                       Xác nhận
-                    </Button>
+                    </LoadingButton>
                   )}
 
                   {!["cancelled", "failed"].includes(booking.status) && (
                     <LoadingButton
                       loading={
-                        loading.researvtionId === booking.id && loading.cancel
+                        loading.reservationId === booking.id && loading.cancel
                       }
-                      loadingIndicator={<CircularProgress />}
-                      loadingPosition="start"
+                      loadingPosition="end"
                       variant="outlined"
                       color="error"
                       onClick={() => {

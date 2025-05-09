@@ -76,23 +76,21 @@ export default function BookingHistory() {
         totalPages: data.totalPages,
       });
 
-      console.log(data.docs);
-
       setBookings(
         data.docs.map((booking: any) => ({
           id: booking.id,
-          hotelName: booking["room-type"].name,
-          location: "",
+          hotelName: booking.room_type.hotel?.name,
+          location: booking.room_type.hotel?.address,
           image:
             process.env.NEXT_PUBLIC_PAYLOAD_API_URL +
             `${
-              booking["room-type"].image.length > 0
-                ? booking["room-type"].image[0].image.url
+              booking.room_type.image.length > 0
+                ? booking.room_type.image[0].image.url
                 : "/api/media/file/not-found-img.jpg"
             }`,
           checkIn: booking.start_date,
           checkOut: booking.end_date,
-          price: 200000,
+          price: booking.price,
           status: booking.payment_status,
         }))
       );

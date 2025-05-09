@@ -188,13 +188,14 @@ export default function BookingSummary() {
         </Typography>
 
         <Typography variant="h6" mt={4}>
-          Enter your details
+          Thông tin của bạn
         </Typography>
         <Grid container spacing={2} mt={1}>
           <Grid item xs={12} sm={6}>
             <TextField
+              disabled
               fullWidth
-              label="Full name"
+              label="Họ tên"
               name="name"
               value={form.name}
               onChange={handleChange}
@@ -202,8 +203,9 @@ export default function BookingSummary() {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
+              disabled
               fullWidth
-              label="Email address"
+              label="Email"
               name="email"
               value={form.email}
               onChange={handleChange}
@@ -211,8 +213,9 @@ export default function BookingSummary() {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
+              disabled
               fullWidth
-              label="Phone number"
+              label="Số điện thoại"
               name="phone"
               value={form.phone}
               onChange={handleChange}
@@ -245,7 +248,7 @@ export default function BookingSummary() {
                   src={hotelInfo.img}
                   width={150}
                   height={150}
-                  alt="Picture of the author"
+                  alt={hotelInfo.name}
                   style={{ borderRadius: "10px" }}
                 />
               )}

@@ -42,11 +42,9 @@ export async function paymentPost(reservationId: string) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        paymentRequest: {
-          id: reservationId,
-          success: success_url,
-          cancel: cancel_url,
-        },
+        id: reservationId,
+        success: success_url,
+        cancel: cancel_url,
       }),
     });
 

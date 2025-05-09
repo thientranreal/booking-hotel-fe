@@ -128,12 +128,10 @@ export default function BookingSummary() {
         user: userId,
       });
 
-      console.log(data);
-
-      if (data && data.doc) {
+      if (data) {
         setIsBookingSuccess(true);
 
-        setReservationId(data.doc.id);
+        setReservationId(data.id);
       } else {
         toast.error(data?.errors[0]?.message);
       }

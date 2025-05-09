@@ -30,6 +30,8 @@ type Review = {
 export default function Review() {
   const [openReview, setOpenReview] = useState<boolean>(false);
 
+  const [user, setUser] = useState();
+
   const params = useParams<{ hotelID: string }>();
 
   const [overallRating, setOverallRating] = useState<{
@@ -77,16 +79,19 @@ export default function Review() {
     setIsLoadingPost(true);
   };
 
+  const fetchCurrentUser = async () => {
+    const userData = await currentUser();
+
+    setUser(userData.user);
+  };
+
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
+
   useEffect(() => {
     if (isLoadingPost) {
       const postReview = async () => {
-        const userData = await currentUser();
-        if (!userData.user) {
-          toast.warn("Bạn phải đăng nhập thì mới có thể đánh giá");
-          setIsLoadingPost(false);
-          return;
-        }
-
         // Post comment
         const data = await reviewPost({
           title,
@@ -288,82 +293,86 @@ export default function Review() {
 
       <Divider sx={{ my: 3 }} />
 
-      {/* Review section */}
-      <Box sx={{ maxWidth: "800px", margin: "auto", padding: 3 }}>
-        <Typography
-          variant="h4"
-          align="center"
-          fontWeight={600}
-          sx={{
-            textTransform: "uppercase",
-            letterSpacing: 1.2,
-            color: "text.primary",
-          }}
-          gutterBottom
-        >
-          Đánh giá của bạn
-        </Typography>
+      {user && (
+        <>
+          {/* Review section */}
+          <Box sx={{ maxWidth: "800px", margin: "auto", padding: 3 }}>
+            <Typography
+              variant="h4"
+              align="center"
+              fontWeight={600}
+              sx={{
+                textTransform: "uppercase",
+                letterSpacing: 1.2,
+                color: "text.primary",
+              }}
+              gutterBottom
+            >
+              Đánh giá của bạn
+            </Typography>
 
-        {/* Display error if any */}
-        {error && (
-          <Typography color="error" align="center">
-            {error}
-          </Typography>
-        )}
+            {/* Display error if any */}
+            {error && (
+              <Typography color="error" align="center">
+                {error}
+              </Typography>
+            )}
 
-        {/* Review Submission Form */}
-        <Box component="form" onSubmit={handleSubmit}>
-          <Rating
-            value={rating}
-            onChange={(_, newValue) => setRating(newValue)}
-            precision={0.5}
-            sx={{ marginBottom: 2 }}
-          />
-          <TextField
-            label="Tiêu đề"
-            multiline
-            fullWidth
-            margin="normal"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-          <TextField
-            label="Viết đánh giá"
-            multiline
-            rows={4}
-            fullWidth
-            margin="normal"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-          />
-          <LoadingButton
-            loading={isLoadingPost}
-            loadingPosition="start"
-            variant="contained"
-            type="submit"
-            fullWidth
-            sx={{
-              mt: 2,
-              borderRadius: 2,
-              textTransform: "none",
-              fontWeight: 600,
-              px: 4,
-              py: 1.5,
-              boxShadow: 3,
-              ":hover": {
-                boxShadow: 4,
-                backgroundColor: "#c9302c",
-              },
-              transition: "background-color 0.3s, box-shadow 0.3s",
-            }}
-          >
-            Đăng review của bạn
-          </LoadingButton>
-        </Box>
-      </Box>
-      {/* End review section */}
+            {/* Review Submission Form */}
+            <Box component="form" onSubmit={handleSubmit}>
+              <Rating
+                value={rating}
+                onChange={(_, newValue) => setRating(newValue)}
+                precision={0.5}
+                sx={{ marginBottom: 2 }}
+              />
+              <TextField
+                label="Tiêu đề"
+                multiline
+                fullWidth
+                margin="normal"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+              />
+              <TextField
+                label="Viết đánh giá"
+                multiline
+                rows={4}
+                fullWidth
+                margin="normal"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                required
+              />
+              <LoadingButton
+                loading={isLoadingPost}
+                loadingPosition="start"
+                variant="contained"
+                type="submit"
+                fullWidth
+                sx={{
+                  mt: 2,
+                  borderRadius: 2,
+                  textTransform: "none",
+                  fontWeight: 600,
+                  px: 4,
+                  py: 1.5,
+                  boxShadow: 3,
+                  ":hover": {
+                    boxShadow: 4,
+                    backgroundColor: "#c9302c",
+                  },
+                  transition: "background-color 0.3s, box-shadow 0.3s",
+                }}
+              >
+                Đăng review của bạn
+              </LoadingButton>
+            </Box>
+          </Box>
+          {/* End review section */}
+        </>
+      )}
     </Box>
   );
 }

@@ -252,7 +252,7 @@ export default function BookingHistory() {
                   {new Date(booking.checkOut).toLocaleString()}
                 </Typography>
                 <Typography>
-                  <strong>Giá:</strong> {booking.price}
+                  <strong>Giá:</strong> {booking.price.toLocaleString()} VND
                 </Typography>
                 <Chip
                   label={booking.status}

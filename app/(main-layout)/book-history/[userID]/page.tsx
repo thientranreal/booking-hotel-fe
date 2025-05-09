@@ -1,6 +1,6 @@
 "use client";
 
-import { reservationGet } from "@/api/reservation";
+import { paymentPost, reservationGet } from "@/api/reservation";
 import Pagination from "@/components/ui/Pagination";
 import {
   Box,
@@ -97,6 +97,18 @@ export default function BookingHistory() {
     }
   };
 
+  const handlePayment = async (reservationId: string) => {
+    const data = await paymentPost(reservationId);
+
+    if (data && data.errors) {
+      toast.error(data.errors[0].message);
+    } else if (data && data.error) {
+      toast.error(data.error);
+    } else if (data && data.url) {
+      window.location.href = data.url;
+    }
+  };
+
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;
 
@@ -141,7 +153,14 @@ export default function BookingHistory() {
                 />
                 <Box mt={2}>
                   {["pending", "unpaid"].includes(booking.status) && (
-                    <Button variant="contained" color="primary" sx={{ mr: 1 }}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{ mr: 1 }}
+                      onClick={() => {
+                        handlePayment(booking.id);
+                      }}
+                    >
                       Xác nhận
                     </Button>
                   )}

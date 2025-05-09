@@ -1,4 +1,6 @@
 const apiUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
+const success_url = process.env.NEXT_PUBLIC_SUCCESS_PAGE;
+const cancel_url = process.env.NEXT_PUBLIC_CANCEL_PAGE;
 
 export async function reservationPost(formData: {
   roomType: string;
@@ -31,11 +33,7 @@ export async function reservationPost(formData: {
   }
 }
 
-export async function paymentPost(formData: {
-  reservationId: string;
-  success: string;
-  cancel: string;
-}) {
+export async function paymentPost(reservationId: string) {
   try {
     const response = await fetch(`${apiUrl}/api/reservation/payment`, {
       method: "POST",
@@ -45,9 +43,9 @@ export async function paymentPost(formData: {
       },
       body: JSON.stringify({
         paymentRequest: {
-          id: formData.reservationId,
-          success: formData.success,
-          cancel: formData.cancel,
+          id: reservationId,
+          success: success_url,
+          cancel: cancel_url,
         },
       }),
     });

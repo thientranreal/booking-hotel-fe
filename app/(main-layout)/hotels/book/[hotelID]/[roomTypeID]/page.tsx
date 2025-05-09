@@ -35,11 +35,7 @@ export default function BookingSummary() {
 
   const [isBookingSuccess, setIsBookingSuccess] = useState(false);
 
-  const [formData, setFormData] = useState({
-    reservationId: "",
-    success: process.env.NEXT_PUBLIC_SUCCESS_PAGE ?? "",
-    cancel: process.env.NEXT_PUBLIC_CANCEL_PAGE ?? "",
-  });
+  const [reservationId, setReservationId] = useState("");
 
   const [hotelInfo, setHotelInfo] = useState({
     rate: 0,
@@ -135,7 +131,7 @@ export default function BookingSummary() {
       if (data && data.doc) {
         setIsBookingSuccess(true);
 
-        setFormData((prev) => ({ ...prev, reservationId: data.doc.id }));
+        setReservationId(data.doc.id);
       } else {
         toast.error(data?.errors[0]?.message);
       }
@@ -143,8 +139,8 @@ export default function BookingSummary() {
   };
 
   const handleClickAcceptPayment = async () => {
-    if (formData.reservationId) {
-      const data = await paymentPost(formData);
+    if (reservationId) {
+      const data = await paymentPost(reservationId);
 
       if (data && data.errors) {
         toast.error(data.errors[0].message);

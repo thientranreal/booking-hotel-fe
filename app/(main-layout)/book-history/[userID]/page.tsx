@@ -265,7 +265,6 @@ export default function BookingHistory() {
                       loading={
                         loading.reservationId === booking.id && loading.accept
                       }
-                      loadingPosition="end"
                       variant="contained"
                       color="primary"
                       sx={{ mr: 1 }}
@@ -282,7 +281,6 @@ export default function BookingHistory() {
                       loading={
                         loading.reservationId === booking.id && loading.cancel
                       }
-                      loadingPosition="end"
                       variant="outlined"
                       color="error"
                       onClick={() => {

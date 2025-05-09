@@ -128,6 +128,8 @@ export default function BookingSummary() {
         user: userId,
       });
 
+      console.log(data);
+
       if (data && data.doc) {
         setIsBookingSuccess(true);
 

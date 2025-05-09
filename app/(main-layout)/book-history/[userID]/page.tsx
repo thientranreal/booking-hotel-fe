@@ -7,6 +7,7 @@ import {
   reservationUpdateStatus,
 } from "@/api/reservation";
 import Pagination from "@/components/ui/Pagination";
+import { LoadingButton } from "@mui/lab";
 import {
   Box,
   Grid,
@@ -16,6 +17,7 @@ import {
   Typography,
   Chip,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -56,6 +58,13 @@ export default function BookingHistory() {
   const searchParams = useSearchParams();
 
   const [bookings, setBookings] = useState<Booking[]>([]);
+
+  const [loading, setLoading] = useState({
+    researvtionId: "",
+    action: "",
+    cancel: false,
+    accept: false,
+  });
 
   const [paginationData, setPaginationData] = useState({
     hasNextPage: false,
@@ -120,36 +129,72 @@ export default function BookingHistory() {
   ) => {
     if (paymentStatus === "pending" || paymentStatus === "unpaid") {
       const confirmed = window.confirm("Bạn có muốn hủy đơn đặt này ?");
+
       if (confirmed) {
-        const data = await reservationUpdateStatus(reservationId, "cancelled");
-
-        if (data && data.errors) {
-          toast.error(data.errors[0].message);
-        } else {
-          toast.success("Đơn của bạn hủy thành công !");
-
-          // Reload the page
-          const page = searchParams.get("page") ?? 1;
-
-          fetchReservation(Number(page));
-        }
+        setLoading((prev) => ({
+          ...prev,
+          reservationId,
+          action: "cancel",
+          cancel: true,
+        }));
       }
     } else if (paymentStatus === "paid") {
       const confirmed = window.confirm("Bạn có muốn hoàn tiền đơn đặt này ?");
 
       if (confirmed) {
-        const data = await refundPost(reservationId);
-
-        console.log(data);
-
-        if (data && data.status === "succeeded") {
-          toast.success("Đơn đặt của bạn đã hoàn tiền thành công !");
-        } else {
-          toast.error("Hoàn tiền thất bại !");
-        }
+        setLoading((prev) => ({
+          ...prev,
+          reservationId,
+          action: "refund",
+          cancel: true,
+        }));
       }
     }
   };
+
+  const updateStatusToCancel = async (reservationId: string, page: number) => {
+    const data = await reservationUpdateStatus(reservationId, "cancelled");
+
+    if (data && data.errors) {
+      toast.error(data.errors[0].message);
+    } else {
+      toast.success("Đơn của bạn hủy thành công !");
+
+      fetchReservation(page);
+    }
+  };
+
+  const refundPayment = async (reservationId: string) => {
+    const data = await refundPost(reservationId);
+
+    console.log(data);
+
+    if (data && data.status === "succeeded") {
+      toast.success("Đơn đặt của bạn đã hoàn tiền thành công !");
+    } else {
+      toast.error("Hoàn tiền thất bại !");
+    }
+  };
+
+  useEffect(() => {
+    if (loading.cancel && loading.researvtionId) {
+      setLoading((prev) => ({
+        ...prev,
+        reservationId: "",
+        action: "",
+        cancel: false,
+      }));
+
+      if (loading.action === "cancel") {
+        updateStatusToCancel(
+          loading.researvtionId,
+          Number(searchParams.get("page") ?? 1)
+        );
+      } else if (loading.action === "refund") {
+        refundPayment(loading.researvtionId);
+      }
+    }
+  }, [loading.cancel, loading.accept]);
 
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;
@@ -208,7 +253,12 @@ export default function BookingHistory() {
                   )}
 
                   {!["cancelled", "failed"].includes(booking.status) && (
-                    <Button
+                    <LoadingButton
+                      loading={
+                        loading.researvtionId === booking.id && loading.cancel
+                      }
+                      loadingIndicator={<CircularProgress />}
+                      loadingPosition="start"
                       variant="outlined"
                       color="error"
                       onClick={() => {
@@ -216,7 +266,7 @@ export default function BookingHistory() {
                       }}
                     >
                       Hủy
-                    </Button>
+                    </LoadingButton>
                   )}
                 </Box>
               </CardContent>

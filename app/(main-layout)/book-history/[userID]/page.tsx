@@ -123,12 +123,15 @@ export default function BookingHistory() {
       if (confirmed) {
         const data = await reservationUpdateStatus(reservationId, "cancelled");
 
-        console.log(data);
-
         if (data && data.errors) {
           toast.error(data.errors[0].message);
         } else {
           toast.success("Đơn của bạn hủy thành công !");
+
+          // Reload the page
+          const page = searchParams.get("page") ?? 1;
+
+          fetchReservation(Number(page));
         }
       }
     } else if (paymentStatus === "paid") {

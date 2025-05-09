@@ -66,8 +66,6 @@ export async function refundPost(reservationId: string) {
       },
       body: JSON.stringify({
         id: reservationId,
-        success: success_url,
-        cancel: cancel_url,
       }),
     });
 

@@ -142,6 +142,8 @@ export default function BookingSummary() {
     if (reservationId) {
       const data = await paymentPost(reservationId);
 
+      console.log(data);
+
       if (data && data.errors) {
         toast.error(data.errors[0].message);
       } else if (data && data.error) {

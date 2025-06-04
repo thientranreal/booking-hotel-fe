@@ -28,10 +28,10 @@ export default function CancelPage({ onRetry }: CancelPageProps) {
         <CardContent>
           <CancelOutlined color="error" sx={{ fontSize: 80, mb: 2 }} />
           <Typography variant="h5" fontWeight="bold" mb={1}>
-            Payment Canceled
+            Thanh toán đã bị hủy
           </Typography>
           <Typography variant="body1" color="text.secondary" mb={4}>
-            Your payment was not completed. Please try again or contact support.
+            Thanh toán của bạn chưa được hoàn tất. Vui lòng thử lại hoặc liên hệ với bộ phận hỗ trợ.
           </Typography>
 
           <Button
@@ -47,7 +47,7 @@ export default function CancelPage({ onRetry }: CancelPageProps) {
               fontWeight: "bold",
             }}
           >
-            Try Again
+            Thử lại
           </Button>
         </CardContent>
       </Card>

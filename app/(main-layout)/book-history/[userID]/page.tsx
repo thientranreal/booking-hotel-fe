@@ -249,7 +249,7 @@ export default function BookingHistory() {
             <Card sx={{ height: "100%" }}>
               <CardMedia
                 component="img"
-                height="200"
+                sx={{ height: 200, objectFit: "cover" }}
                 image={booking.image}
                 alt={booking.hotelName}
               />

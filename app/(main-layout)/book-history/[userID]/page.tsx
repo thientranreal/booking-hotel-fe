@@ -21,7 +21,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-type BookingStatus = "paid" | "unpaid" | "failed" | "pending" | "cancelled";
+type BookingStatus = "paid" | "failed" | "pending" | "cancelled" | "refunded";
 
 interface Booking {
   id: string;
@@ -42,7 +42,7 @@ const getStatusColor = (status: BookingStatus) => {
       return "warning";
     case "cancelled":
       return "error";
-    case "unpaid":
+    case "refunded":
       return "info";
     case "failed":
       return "error";
@@ -55,14 +55,14 @@ const translateBookingStatusToVN = (status: BookingStatus) => {
   switch (status) {
     case "paid":
       return "Đã thanh toán";
-    case "unpaid":
-      return "Chưa thanh toán";
     case "failed":
       return "Thanh toán thất bại";
     case "pending":
       return "Đang chờ xử lý";
     case "cancelled":
       return "Đã hủy";
+    case "refunded":
+      return "Đã hoàn tiền";
     default:
       return "Không xác định";
   }
@@ -138,7 +138,7 @@ export default function BookingHistory() {
     reservationId: string,
     paymentStatus: BookingStatus
   ) => {
-    if (paymentStatus === "pending" || paymentStatus === "unpaid") {
+    if (paymentStatus === "pending") {
       const confirmed = window.confirm("Bạn có muốn hủy đơn đặt này ?");
 
       if (confirmed) {
@@ -275,7 +275,7 @@ export default function BookingHistory() {
                   sx={{ mt: 1 }}
                 />
                 <Box mt={2}>
-                  {["pending", "unpaid"].includes(booking.status) && (
+                  {booking.status === "pending" && (
                     <LoadingButton
                       loading={
                         loading.reservationId === booking.id && loading.accept
@@ -291,7 +291,7 @@ export default function BookingHistory() {
                     </LoadingButton>
                   )}
 
-                  {!["cancelled", "failed"].includes(booking.status) && (
+                  {!["cancelled", "failed", "refunded"].includes(booking.status) && (
                     <LoadingButton
                       loading={
                         loading.reservationId === booking.id && loading.cancel

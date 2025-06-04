@@ -43,10 +43,10 @@ export default function Pagination({
         variant="contained"
         color="primary"
       >
-        Previous
+        Trước
       </Button>
       <Typography variant="body1">
-        Page {page} of {totalPages}
+        Trang {page} trên {totalPages}
       </Typography>
       <Button
         onClick={() => onPageChange(nextPage)}
@@ -54,7 +54,7 @@ export default function Pagination({
         variant="contained"
         color="primary"
       >
-        Next
+        Sau
       </Button>
     </Stack>
   );

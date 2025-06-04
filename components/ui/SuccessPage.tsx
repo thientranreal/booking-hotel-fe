@@ -28,10 +28,10 @@ export default function SuccessPage() {
         <CardContent>
           <CheckCircleOutline color="success" sx={{ fontSize: 80, mb: 2 }} />
           <Typography variant="h5" fontWeight="bold" mb={1}>
-            Payment Successful!
+            Thanh toán thành công!
           </Typography>
           <Typography variant="body1" color="text.secondary" mb={4}>
-            Thank you for your booking. We look forward to hosting you!
+            Cảm ơn bạn đã đặt chỗ. Chúng tôi rất mong được đón tiếp bạn!
           </Typography>
 
           <Button
@@ -47,7 +47,7 @@ export default function SuccessPage() {
               fontWeight: "bold",
             }}
           >
-            Back to Home
+            Quay về trang chủ
           </Button>
         </CardContent>
       </Card>

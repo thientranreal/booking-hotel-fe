@@ -51,6 +51,23 @@ const getStatusColor = (status: BookingStatus) => {
   }
 };
 
+const translateBookingStatusToVN = (status: BookingStatus) => {
+  switch (status) {
+    case "paid":
+      return "Đã thanh toán";
+    case "unpaid":
+      return "Chưa thanh toán";
+    case "failed":
+      return "Thanh toán thất bại";
+    case "pending":
+      return "Đang chờ xử lý";
+    case "cancelled":
+      return "Đã hủy";
+    default:
+      return "Không xác định";
+  }
+};
+
 export default function BookingHistory() {
   const params = useParams<{ userID: string }>();
   const searchParams = useSearchParams();
@@ -168,8 +185,6 @@ export default function BookingHistory() {
   const refundPayment = async (reservationId: string) => {
     const data = await refundPost(reservationId);
 
-    console.log(data);
-
     if (data && data.status === "succeeded") {
       toast.success("Đơn đặt của bạn đã hoàn tiền thành công !");
     } else {
@@ -255,7 +270,7 @@ export default function BookingHistory() {
                   <strong>Giá:</strong> {booking.price.toLocaleString()} VND
                 </Typography>
                 <Chip
-                  label={booking.status}
+                  label={translateBookingStatusToVN(booking.status)}
                   color={getStatusColor(booking.status as BookingStatus)}
                   sx={{ mt: 1 }}
                 />

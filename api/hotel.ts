@@ -63,8 +63,6 @@ export async function hotelGetWithParams(
 
     const finalUrl = `${baseUrl}?${paramsConstruct}`;
 
-    console.log(finalUrl);
-
     const response = await fetch(finalUrl);
 
     const data = await response.json();
